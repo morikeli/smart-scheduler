@@ -5,7 +5,7 @@
 *env
 
 # migrations
-*migrations/*py
+*migrations
 
 # binary files
 *__pycache__
