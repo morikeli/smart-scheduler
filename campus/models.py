@@ -58,8 +58,7 @@ class BookedUnit(models.Model):
     """ These are records of units assigned to a lecturer each semester. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     lecturer = models.ForeignKey(Faculty, on_delete=models.CASCADE)
-    course_code = models.CharField(max_length=7, blank=False)
-    course_title = models.CharField(max_length=50, blank=False)
+    course_name = models.CharField(max_length=80, blank=False)
     year_of_study = models.CharField(max_length=10, blank=False)
     semester = models.CharField(max_length=1, blank=False)
     booking_date = models.DateTimeField(auto_now_add=True)
