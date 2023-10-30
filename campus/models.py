@@ -22,7 +22,7 @@ class Student(models.Model):
     """ This model stores info about students records. """
     id = models.CharField(max_length=30, primary_key=True,  unique=True, editable=False)
     student_name = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.ForeignKey(School, on_delete=models.CASCADE, editable=False)
+    school = models.OneToOneField(School, on_delete=models.CASCADE)
     reg_no = models.CharField(max_length=14, blank=False, db_column='Registration No.')
     year = models.CharField(max_length=10, blank=False, db_column='Year of Study')
     semester = models.CharField(max_length=1, blank=False)
@@ -93,8 +93,9 @@ class Lecture(models.Model):
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     lecturer = models.ForeignKey(Faculty, on_delete=models.CASCADE, editable=False)
     lecture_hall = models.ForeignKey('LectureHall', on_delete=models.CASCADE, editable=False)
+    unit_name = models.ForeignKey(BookedUnit, on_delete=models.CASCADE)
     lecture_date = models.DateField(null=False, blank=False)
-    start_time = models.TimeField(null=False, blank=False, db_column='SCheduled start time')    # lecture should start at this time
+    start_time = models.TimeField(null=False, blank=False, db_column='Scheduled start time')    # lecture should start at this time
     end_time = models.TimeField(null=False, blank=False, db_column='Scheduled end time')     # lecture should end at this time
     total_students = models.PositiveIntegerField(default=0, editable=False)     # approximate no. of students expected to attend the lecture.
     is_taught = models.BooleanField(default=False, editable=False)  # was the class taught or it "bounced".
