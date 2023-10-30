@@ -113,6 +113,7 @@ class LectureHall(models.Model):
     seating_capacity = models.PositiveIntegerField(default=0, editable=False)
     floor = models.CharField(max_length=7, blank=False)
     rating = models.PositiveIntegerField(default=0, editable=False)
+    image = models.ImageField(upload_to='Lecture-Halls/img/', default='lecture-hall.png')
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
 
