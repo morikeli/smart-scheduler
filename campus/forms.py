@@ -13,7 +13,7 @@ class SchoolRegistrationForm(forms.ModelForm):
         model = School
         fields = ['name']
 
-class AddLectureHall(forms.ModelForm):
+class AddLectureHallForm(forms.ModelForm):
     SELECT_FLOOR = (
         (None, '-- Select floor --'),
         ('GF', 'Ground floor'),
