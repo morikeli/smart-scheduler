@@ -65,10 +65,10 @@ class BookedUnit(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.course_title
+        return self.course_name
     
     class Meta:
-        ordering = ['lecturer', 'course_code', 'course_title']
+        ordering = ['lecturer', 'course_name']
         verbose_name_plural = 'Booked units'
 
 class RegisteredUnit(models.Model):

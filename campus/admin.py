@@ -18,8 +18,8 @@ class FacultyRecords(admin.ModelAdmin):
 
 @admin.register(BookedUnit)
 class BookedUnitsTable(admin.ModelAdmin):
-    list_display = ['lecturer', 'course_code', 'course_title']
-    readonly_fields = ['lecturer', 'course_code', 'course_title']
+    list_display = ['lecturer', 'course_name', 'year_of_study', 'semester']
+    readonly_fields = ['lecturer', 'course_name', 'year_of_study', 'semester']
 
 @admin.register(RegisteredUnit)
 class RegisteredUnitsRecords(admin.ModelAdmin):
