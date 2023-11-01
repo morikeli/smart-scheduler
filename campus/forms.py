@@ -45,10 +45,9 @@ class AddLectureHallForm(forms.ModelForm):
 
     class Meta:
         model = LectureHall
-        fields = ['academic_block', 'hall_no', 'seating_capacity', 'floor', 'rating']
+        fields = ['academic_block', 'hall_no', 'floor']
 
 class StudentUnitsRegistrationForm(forms.ModelForm):
-
     unit = forms.ChoiceField(widget=forms.SelectMultiple(attrs={
             'type': 'select', 'class': 'mb-0',
         }),
@@ -61,17 +60,6 @@ class StudentUnitsRegistrationForm(forms.ModelForm):
         fields = ['unit']
 
 class LecturerUnitsBookingForm(forms.ModelForm):
-    # from Faculty QS only filter lecturers and add them in the dropdown menu.
-    lecturer_qs = Faculty.objects.filter(position__icontains='lecturer')
-
-    SELECT_LECTURER = (
-        (None, '-- Select lecturer --'),
-        [(lec, lec) for lec in lecturer_qs],
-    )
-    SELECT_COURSE_NAME = (
-        (None, '-- Select course name --'),
-
-    )
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
         ('1', 'First years (Freshers)'),
@@ -88,12 +76,10 @@ class LecturerUnitsBookingForm(forms.ModelForm):
     lecturer = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
         }),
-        choices=SELECT_LECTURER,
     )
     course_name = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
         }),
-        choices=SELECT_COURSE_NAME,
     )
     
     year_of_study = forms.ChoiceField(widget=forms.Select(attrs={
@@ -113,18 +99,17 @@ class LecturerUnitsBookingForm(forms.ModelForm):
         fields = ['lecturer', 'course_name', 'year_of_study', 'semester']
 
 class LectureSchedulingForm(forms.ModelForm):
-    # get QS for units a lecturer will be teaching and display in dropdown menu
-    unit_qs = lambda request: BookedUnit.objects.filter(lecturer=request.user.faculty.staff)
-    SELECT_BOOKED_UNIT = (
-        (None, '-- Select one unit --'),
-        [(unit, unit) for unit in unit_qs]
+    SELECT_RECURRENCE_PATTERN = (
+        (None, '-- Select one choice'),
+        ('Once', 'Once'),
+        ('Daily', 'Daily'),
+        ('Weekly', 'Weekly'),
     )
 
     unit_name = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
         }),
         label='Unit',
-        choices=SELECT_BOOKED_UNIT,
     )
     lecture_date = forms.DateField(widget=forms.DateInput(attrs={
             'type': 'date', 'class': 'mb-0',
@@ -143,18 +128,27 @@ class LectureSchedulingForm(forms.ModelForm):
         help_text='At what time will this lecture end?',
         label='Schedule end time',
     )
+    recurrence_pattern = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'text', 'class': 'mb-0',
+        }),
+        help_text='Schedule lecture once, daily or weekly',
+        label='Recurrence mode',
+        choices=SELECT_RECURRENCE_PATTERN,
+    )
 
     class Meta:
         model = Lecture
-        fields = ['unit_name', 'lecture_date', 'start_time', 'end_time']
+        fields = ['unit_name', 'lecture_date', 'start_time', 'end_time', 'recurrence_pattern']
 
 class FeedbackForm(forms.ModelForm):
     SELECT_TYPE_COMPLAINT = (
         (None, '-- Select type of complaint --'),
         ('Burnt bulbs', 'Burnt bulbs/flourescent tubes'),
+        ('Dirty whiteboard', 'Dirty whiteboard (Permanent marker used)'),
         ('Dysfunctional sockets', 'Dysfunctional sockets'),
         ('Environmental noise', 'Environmental noise'),
-        ('Naked electrical wires', 'Naked electrical wires')
+        ('Naked electrical wires', 'Naked electrical wires'),
+        ('No seats', 'No seats'),
         ('Poor lighting', 'Poor lighting'),
         ('Unfavorable temperature', 'Unfavorable temperature i.e. too cold/hot'),
     )
