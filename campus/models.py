@@ -41,7 +41,7 @@ class Faculty(models.Model):
     """ This db table stores records of all staff in a given faculty. In this case lecturer and HOD are the only members in the faculty. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     staff = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.CharField(max_length=30, blank=False)
+    school = models.OneToOneField(School, on_delete=models.CASCADE)
     department = models.CharField(max_length=40, blank=False)
     position = models.CharField(max_length=20, blank=False)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -75,7 +75,7 @@ class RegisteredUnit(models.Model):
     """ These are records for units a student has registered in a given semester. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, editable=False)
-    unit = models.ForeignKey(BookedUnit, on_delete=models.CASCADE, editable=False)
+    unit = models.ForeignKey(BookedUnit, on_delete=models.CASCADE)
     is_registered = models.BooleanField(default=False, editable=False)
     date_registered = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
