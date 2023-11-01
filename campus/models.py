@@ -96,6 +96,7 @@ class Lecture(models.Model):
     lecture_date = models.DateField(null=False, blank=False)
     start_time = models.TimeField(null=False, blank=False, db_column='Scheduled start time')    # lecture should start at this time
     end_time = models.TimeField(null=False, blank=False, db_column='Scheduled end time')     # lecture should end at this time
+    recurrence_pattern = models.CharField(max_length=10, blank=False)
     total_students = models.PositiveIntegerField(default=0, editable=False)     # approximate no. of students expected to attend the lecture.
     is_taught = models.BooleanField(default=False, editable=False)  # was the class taught or it "bounced".
     date_scheduled = models.DateTimeField(auto_now_add=True)
