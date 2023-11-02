@@ -1,7 +1,7 @@
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+# from campus.models import School
 
 class User(AbstractUser):
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
@@ -62,7 +62,7 @@ class Student(models.Model):
     
     def __str__(self) -> str or None:
         return self.student_name
-    
+
 class Faculty(models.Model):
     """ This db table stores records of all staff in a given faculty. In this case lecturer and HOD are the only members in the faculty. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)

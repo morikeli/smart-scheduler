@@ -1,58 +1,6 @@
-from accounts.models import User
+from accounts.models import Student, Faculty
 from django.db import models
 
-
-class School(models.Model):
-    """ This model stores records of all schools in the campus. """
-    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
-    name = models.CharField(max_length=70, blank=False)     # name of the school.
-    total_students = models.PositiveIntegerField(default=0, editable=False)
-    total_staff = models.PositiveIntegerField(default=0, editable=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_edited = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['name']
-        verbose_name_plural = 'School records'
-
-    def __str__(self) -> str:
-        return self.name
-
-class Student(models.Model):
-    """ This model stores info about students records. """
-    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
-    student_name = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
-    reg_no = models.CharField(max_length=14, blank=False, unique=True, db_column='Registration No.')
-    year = models.CharField(max_length=10, blank=False, db_column='Year of Study')
-    semester = models.CharField(max_length=1, blank=False)
-    programme = models.CharField(max_length=35, blank=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['student_name', 'reg_no']
-        verbose_name_plural = 'Students records'
-    
-    def __str__(self) -> str or None:
-        return self.student_name
-    
-class Faculty(models.Model):
-    """ This db table stores records of all staff in a given faculty. In this case lecturer and HOD are the only members in the faculty. """
-    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
-    staff = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
-    department = models.CharField(max_length=40, blank=False)
-    position = models.CharField(max_length=20, blank=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self) -> str:
-        return self.staff
-    
-    class Meta:
-        ordering = ['staff', 'school']
-        verbose_name_plural = 'Faculty records'
 
 class BookedUnit(models.Model):
     """ These are records of units assigned to a lecturer each semester. """
