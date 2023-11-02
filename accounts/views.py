@@ -1,4 +1,4 @@
-from .forms import SignupForm, EditProfileForm, StudentRegistrationForm, FacultyRegistrationForm
+from .forms import SignupForm, EditProfileForm, EditFacultyDetailsForm, EditStudentDetailsForm, StudentRegistrationForm, FacultyRegistrationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
@@ -90,50 +90,80 @@ class SignupView(SessionWizardView):
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: user.is_staff is False or user.is_superuser is False), name='get')
 class EditStudentProfileView(View):
-    form_class = EditProfileForm
+    profile_form_class = EditProfileForm
+    student_form_class = EditStudentDetailsForm
     template_name = 'dashboard/students/profile.html'
 
     def get(self, request, _student_name, *args, **kwargs):
-        form = self.form_class(instance=request.user)
+        editprofile_form = self.profile_form_class(instance=request.user)
+        editstudent_form = self.student_form_class(instance=request.user.student)
 
-        context = {'EditProfileForm': form}
+        context = {
+            'EditProfileForm': editprofile_form,
+            'UpdateStudentInfoForm': editstudent_form,
+        }
         return render(request, self.template_name, context)
 
     def post(self, request, _student_name, *args, **kwargs):
-        form = self.form_class(request.POST, request.FILES, instance=request.user)
+        editprofile_form = self.profile_form_class(request.POST, request.FILES, instance=request.user)
+        editstudent_form = self.student_form_class(request.POST, instance=request.user.student)
 
-        if form.is_valid():
-            form.save()
+        if editprofile_form.is_valid():
+            editprofile_form.save()
 
             messages.info(request, 'User profile updated successfully')
-            return redirect('profile', _student_name)
+            return redirect('student_profile', _student_name)
+        
+        elif editstudent_form.is_valid():
+            editstudent_form.save()
 
-        context = {'EditProfileForm': form}
+            messages.info(request, 'Student details updated successfully')
+            return redirect('student_profile', _student_name)
+
+        context = {
+            'EditProfileForm': editprofile_form,
+            'UpdateStudentInfoForm': editstudent_form,
+        }
         return render(request, self.template_name, context)
 
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: user.is_staff is False or user.is_superuser is False), name='get')
 class EditFacultyStaffProfileView(View):
-    form_class = EditProfileForm
+    profile_form_class = EditProfileForm
+    faculty_form_class = EditFacultyDetailsForm
     template_name = 'dashboard/faculty/profile.html'
 
     def get(self, request, staff_name, *args, **kwargs):
-        form = self.form_class(instance=request.user)
+        editprofile_form = self.profile_form_class(instance=request.user)
+        editfaculty_form = self.student_form_class(instance=request.user.faculty)
 
-        context = {'EditProfileForm': form}
+        context = {
+            'EditProfileForm': editprofile_form,
+            'UpdateFacultyDetailsForm': editfaculty_form,
+        }
         return render(request, self.template_name, context)
 
     def post(self, request, staff_name, *args, **kwargs):
-        form = self.form_class(request.POST, request.FILES, instance=request.user)
+        editprofile_form = self.profile_form_class(instance=request.user)
+        editfaculty_form = self.student_form_class(instance=request.user.faculty)
 
-        if form.is_valid():
-            form.save()
+        if editprofile_form.is_valid():
+            editprofile_form.save()
 
             messages.info(request, 'User profile updated successfully')
-            return redirect('profile', staff_name)
+            return redirect('faculty_profile', staff_name)
+        
+        elif editfaculty_form.is_valid():
+            editfaculty_form.save()
 
-        context = {'EditProfileForm': form}
+            messages.info(request, 'Staff details updated successfully')
+            return redirect('faculty_profile', staff_name)
+
+        context = {
+            'EditProfileForm': editprofile_form,
+            'UpdateFacultyInfoForm': editfaculty_form,
+        }
         return render(request, self.template_name, context)
 
 
