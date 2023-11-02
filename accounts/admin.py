@@ -1,4 +1,4 @@
-from .models import Faculty, School, Student, User
+from .models import Faculty, Student, User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from .models import User
@@ -17,11 +17,6 @@ class UserLayout(UserAdmin):
     )
 
 admin.site.register(User, UserLayout)
-
-@admin.register(School)
-class SchoolsRecordsTable(admin.ModelAdmin):
-    list_display = ['name', 'total_students', 'total_staff']
-    readonly_fields = ['total_students', 'total_staff']
 
 @admin.register(Student)
 class StudentsDetailsTable(admin.ModelAdmin):

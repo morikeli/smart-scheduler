@@ -2,7 +2,7 @@ from django.db.models.signals import pre_save
 from django import dispatch
 from datetime import datetime
 from uuid import uuid4
-from .models import User, Faculty, School, Student
+from .models import User, Faculty, Student
 
 @dispatch.receiver(pre_save, sender=User)
 def generate_userID(sender, instance, *args, **kwargs):
@@ -32,11 +32,6 @@ def generate_userID(sender, instance, *args, **kwargs):
     
 @dispatch.receiver(pre_save, sender=Faculty)
 def generate_facultyID(sender, instance, **kwargs):
-    if instance.id == '':
-        instance.id = str(uuid4()).replace('-', '')[:30]
-
-@dispatch.receiver(pre_save, sender=School)
-def generate_schoolID(sender, instance, **kwargs):
     if instance.id == '':
         instance.id = str(uuid4()).replace('-', '')[:30]
 
