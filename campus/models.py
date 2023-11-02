@@ -1,7 +1,6 @@
 from accounts.models import Student, Faculty
 from django.db import models
 
-
 class BookedUnit(models.Model):
     """ These are records of units assigned to a lecturer each semester. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
