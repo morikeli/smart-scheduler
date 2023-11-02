@@ -1,20 +1,5 @@
-from .models import BookedUnit, Faculty, Feedback, Lecture, LectureHall, RegisteredUnit, School, Student
+from .models import BookedUnit, Feedback, Lecture, LectureHall, RegisteredUnit
 from django.contrib import admin
-
-@admin.register(School)
-class SchoolsRecordsTable(admin.ModelAdmin):
-    list_display = ['name', 'total_students', 'total_staff']
-    readonly_fields = ['name', 'total_students', 'total_staff']
-
-@admin.register(Student)
-class StudentsDetailsTable(admin.ModelAdmin):
-    list_display = ['student_name', 'school', 'programme', 'year', 'semester']
-    readonly_fields = ['student_name', 'school', 'programme', 'year', 'semester']
-
-@admin.register(Faculty)
-class FacultyRecords(admin.ModelAdmin):
-    list_display = ['staff', 'department', 'position']
-    readonly_fields = ['staff', 'department', 'position']
 
 @admin.register(BookedUnit)
 class BookedUnitsTable(admin.ModelAdmin):
@@ -34,7 +19,7 @@ class ScheduledLecturesTable(admin.ModelAdmin):
 @admin.register(LectureHall)
 class LectureHallsRecords(admin.ModelAdmin):
     list_display = ['academic_block', 'hall_no', 'seating_capacity', 'floor', 'rating']
-    readonly_fields = ['academic_block', 'hall_no', 'seating_capacity', 'floor', 'rating']
+    # readonly_fields = ['academic_block', 'hall_no', 'seating_capacity', 'floor', 'rating']
 
 @admin.register(Feedback)
 class StudentsFeedbackTable(admin.ModelAdmin):
