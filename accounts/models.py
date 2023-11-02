@@ -31,7 +31,7 @@ class Student(models.Model):
     """ This model stores info about students records. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     student_name = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.CharField(max_length=50, blank=False)
+    school = models.CharField(max_length=70, blank=False)
     reg_no = models.CharField(max_length=14, blank=False, unique=True, db_column='Registration No.')
     year = models.CharField(max_length=10, blank=False, db_column='Year of Study')
     semester = models.CharField(max_length=1, blank=False)
@@ -50,7 +50,7 @@ class Faculty(models.Model):
     """ This db table stores records of all staff in a given faculty. In this case lecturer and HOD are the only members in the faculty. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     staff = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.CharField(max_length=50, blank=False)
+    school = models.CharField(max_length=70, blank=False)
     department = models.CharField(max_length=40, blank=False)
     position = models.CharField(max_length=20, blank=False)
     date_created = models.DateTimeField(auto_now_add=True)
