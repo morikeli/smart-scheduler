@@ -1,8 +1,8 @@
+from .models import Faculty, School, Student, User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from .models import User
 from .forms import SignupForm
-from .models import User
 
 class UserLayout(UserAdmin):
     model = User
@@ -17,3 +17,18 @@ class UserLayout(UserAdmin):
     )
 
 admin.site.register(User, UserLayout)
+
+@admin.register(School)
+class SchoolsRecordsTable(admin.ModelAdmin):
+    list_display = ['name', 'total_students', 'total_staff']
+    readonly_fields = ['total_students', 'total_staff']
+
+@admin.register(Student)
+class StudentsDetailsTable(admin.ModelAdmin):
+    list_display = ['student_name', 'school', 'programme', 'year', 'semester']
+    readonly_fields = ['student_name', 'school', 'programme', 'year', 'semester']
+
+@admin.register(Faculty)
+class FacultyRecords(admin.ModelAdmin):
+    list_display = ['staff', 'department', 'position']
+    readonly_fields = ['staff', 'department', 'position']
