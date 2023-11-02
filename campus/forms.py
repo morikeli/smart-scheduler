@@ -2,52 +2,6 @@ from .models import BookedUnit, Feedback, Lecture, LectureHall, RegisteredUnit
 from accounts.models import School
 from django import forms
 
-class SchoolRegistrationForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={
-            'type': 'text', 'class': 'mb-0',
-        }),
-        help_text='Enter the name of the school',
-        label='School',
-    )
-
-    class Meta:
-        model = School
-        fields = ['name']
-
-class AddLectureHallForm(forms.ModelForm):
-    SELECT_FLOOR = (
-        (None, '-- Select floor --'),
-        ('GF', 'Ground floor'),
-        ('1', 'First floor'),
-        ('2', 'Second floor'),
-        ('3', 'Third floor'),
-        ('4', 'Fourth floor'),
-    )
-
-    academic_block = forms.CharField(widget=forms.TextInput(attrs={
-            'type': 'text', 'class': 'mb-0',
-        }),
-        help_text='On which academic block is lecture hall located?',
-        label='Academic block',    
-    )
-    hall_no = forms.CharField(widget=forms.TextInput(attrs={
-            'type': 'text', 'class': 'mb-0',
-        }),
-        help_text='Enter the hall number or name of the hall/room',
-        label='Lecture room/hall no.',
-    )
-    floor = forms.ChoiceField(widget=forms.Select(attrs={
-            'type': 'select', 'class': 'mb-0',
-        }),
-        choices=SELECT_FLOOR,
-        help_text='Enter floor number of the hall',
-        label='Floor',    
-    )
-
-    class Meta:
-        model = LectureHall
-        fields = ['academic_block', 'hall_no', 'floor']
-
 class StudentUnitsRegistrationForm(forms.ModelForm):
     unit = forms.ChoiceField(widget=forms.SelectMultiple(attrs={
             'type': 'select', 'class': 'mb-0',
