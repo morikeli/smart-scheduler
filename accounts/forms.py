@@ -1,8 +1,16 @@
 from django.contrib.auth.forms import UserCreationForm
 from .utils import validate_image_file
+from .models import Student, Faculty
 from django import forms
 from .models import User
-from .models import Student, Faculty
+
+SELECT_SCHOOL = (
+        (None, '-- Select your school --'),
+        ('School of Arts, Social Sciences and Business', 'School of Arts, Social Sciences and Business (SASSB)'),
+        ('School of Education', 'School of Education (SE)'),
+        ('School of Information, Communication & Media Studies', 'School of Information, Communication & Media Studies (INFOCOMS)'),
+        ('School of Science, Agriculture & Environmental Science', 'School of Science, Agriculture & Environmental Science (SSAES)'),
+)
 
 class SignupForm(UserCreationForm):
     SELECT_TYPE_USER = [
@@ -82,6 +90,12 @@ class StudentRegistrationForm(forms.ModelForm):
         ('2', 'Semester 2'),
     )
 
+    school = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        label='School',
+        choices=SELECT_SCHOOL,
+    )
     reg_no = forms.CharField(widget=forms.TextInput(attrs={
             'type': 'text', 'class': 'mb-2',
         }),
@@ -115,7 +129,13 @@ class FacultyRegistrationForm(forms.ModelForm):
         ('HOD', 'Head of Department (HOD)'),
         ('Lecturer', 'Lecturer'),
     )
-
+    
+    school = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        label='School',
+        choices=SELECT_SCHOOL,
+    )
     department = forms.CharField(widget=forms.TextInput(attrs={
             'type': 'text', 'class': 'mb-2',
         }),
