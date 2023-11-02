@@ -1,5 +1,4 @@
-from .models import BookedUnit, Feedback, Lecture, LectureHall, RegisteredUnit
-from accounts.models import School
+from .models import BookedUnit, Feedback, Lecture, RegisteredUnit
 from django import forms
 
 class StudentUnitsRegistrationForm(forms.ModelForm):
