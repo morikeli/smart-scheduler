@@ -79,10 +79,10 @@ class StudentRegistrationForm(forms.ModelForm):
     )
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
-        ('1', 'First years (Freshers)'),
-        ('2', 'Second years (Sophomores)'),
-        ('3', 'Third years (Juniors)'),
-        ('4', 'Fourth years (Seniors)'),
+        ('1st year', 'First year (Freshers)'),
+        ('2nd year', 'Second year (Sophomores)'),
+        ('3rd year', 'Third year (Juniors)'),
+        ('4th year', 'Fourth year (Seniors)'),
     )
     SELECT_SEMESTER = (
         (None, '-- Select semester --'),
