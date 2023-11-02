@@ -89,24 +89,49 @@ class SignupView(SessionWizardView):
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: user.is_staff is False or user.is_superuser is False), name='get')
-class EditProfileView(View):
+class EditStudentProfileView(View):
     form_class = EditProfileForm
-    template_name = 'accounts/profile.html'
+    template_name = 'dashboard/students/profile.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, _student_name, *args, **kwargs):
         form = self.form_class(instance=request.user)
 
         context = {'EditProfileForm': form}
         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, _student_name, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES, instance=request.user)
 
         if form.is_valid():
             form.save()
 
             messages.info(request, 'User profile updated successfully')
-            return redirect('profile')
+            return redirect('profile', _student_name)
+
+        context = {'EditProfileForm': form}
+        return render(request, self.template_name, context)
+
+
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(user_passes_test(lambda user: user.is_staff is False or user.is_superuser is False), name='get')
+class EditFacultyStaffProfileView(View):
+    form_class = EditProfileForm
+    template_name = 'dashboard/faculty/profile.html'
+
+    def get(self, request, staff_name, *args, **kwargs):
+        form = self.form_class(instance=request.user)
+
+        context = {'EditProfileForm': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request, staff_name, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+
+            messages.info(request, 'User profile updated successfully')
+            return redirect('profile', staff_name)
 
         context = {'EditProfileForm': form}
         return render(request, self.template_name, context)
