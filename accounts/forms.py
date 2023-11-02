@@ -151,6 +151,8 @@ class FacultyRegistrationForm(forms.ModelForm):
         model = Faculty
         fields = ['school', 'department', 'position']
 
+# Edit forms
+
 class EditProfileForm(forms.ModelForm):
     SELECT_GENDER = (
         (None, '-- Select your gender --'),
@@ -206,3 +208,90 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'gender', 'dob', 'mobile_no', 'profile_pic']
+
+class EditStudentDetailsForm(forms.ModelForm):
+    SELECT_COURSE_PROGRAMME = (
+        (None, '-- Select your course programme --'),
+        ('Certificate', 'Certificate'),
+        ('Degree', "Bachelor's Degree"),
+        ('Diploma', 'Diploma'),
+    )
+    SELECT_YEAR_OF_STUDY = (
+        (None, '-- Select year of study --'),
+        ('1st year', 'First year (Fresher)'),
+        ('2nd year', 'Second year (Sophomore)'),
+        ('3rd year', 'Third year (Junior)'),
+        ('4th year', 'Fourth year (Senior)'),
+    )
+    SELECT_SEMESTER = (
+        (None, '-- Select semester --'),
+        ('1', 'Semester 1'),
+        ('2', 'Semester 2'),
+    )
+
+    school = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        label='School',
+        choices=SELECT_SCHOOL,
+        disabled=True,
+    )
+    reg_no = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-2',
+        }),
+        label='Registration Number',
+        disabled=True,
+    )
+    programme = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_COURSE_PROGRAMME,
+        label='Course programme',
+        disabled=True,
+    )
+    year = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_YEAR_OF_STUDY,
+        label='Year of study',    
+    )
+    semester = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_SEMESTER,    
+    )
+
+    class Meta:
+        model = Student
+        fields = ['programme', 'school', 'reg_no', 'year', 'semester']
+
+class EditFacultyDetailsForm(forms.ModelForm):
+    SELECT_FACULTY_ROLE = (
+        (None, '-- Select one choice --'),
+        ('HOD', 'Head of Department (HOD)'),
+        ('Lecturer', 'Lecturer'),
+    )
+    
+    school = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        label='School',
+        choices=SELECT_SCHOOL,
+        disabled=True,
+    )
+    department = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-2',
+        }),
+        disabled=True,
+    )
+    position = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        label='Role',
+        choices=SELECT_FACULTY_ROLE,
+        disabled=True,
+    )
+
+    class Meta:
+        model = Faculty
+        fields = ['school', 'department', 'position']
