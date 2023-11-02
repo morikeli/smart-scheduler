@@ -1,0 +1,91 @@
+{% extends 'accounts/base.html' %}{% block title %}Signup{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+</head>
+<body>
+	{% block content %}
+	<main>
+		<div class="container">
+			<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-xl-6 col-lg-6 d-flex flex-column align-items-center justify-content-center">
+							<div class="d-flex justify-content-center py-4">
+								<a href="{% url 'login' %}" class="logo d-flex align-items-center w-auto">
+									<img src="{% static 'img/logo/logo.png' %}" height="30px" width="30px" alt="logo">
+									<span class="d-none d-lg-block">Class Compass</span>
+								</a>
+							</div>
+							<div class="card mb-3">
+								<div class="card-body">
+									<div class="pt-4 pb-2">
+										<h5 class="card-title text-center pb-0 fs-4">Create Account</h5>
+									</div>
+									<form action="" method="post" class="row g-3" id="auth-form">
+										{% csrf_token %}
+										<div class="col-12">
+											<div class="form-wizard text-center">
+												<p class="small fst-italic">
+													{% if wizard.steps.step1 == 1 %}
+													Fill all form field to go next step
+													{% else %}
+													One final step!
+													{% endif %}
+												</p>
+												<ul class="list-unstyled form-wizard-steps clearfix">
+													{% if wizard.steps.step1 == 1 %}
+													<li class="active">
+														<span>{% if wizard.steps.step1 == 1 %}{{ wizard.steps.step1 }}{% else %} <i class="bi-check-circle-fill" style="font-size: 20px;"></i> {% endif %}</span>
+													</li>
+													<li>
+														<span>{% if wizard.steps.step1 == 2 %}{{ wizard.steps.step1 }}{% else %}{{ wizard.steps.count }}{% endif %}</span>
+													</li>
+													{% else %}
+													<li class="active">
+														<span>{% if wizard.steps.step1 == 1 %}{{ wizard.steps.step1 }}{% else %} <i class="bi-check-circle-fill" style="font-size: 30px;"></i> {% endif %}</span>
+													</li>
+													<li class="active">
+														<span>{% if wizard.steps.step1 == 2 %}{{ wizard.steps.step1 }}{% else %}{{ wizard.steps.count }}{% endif %}</span>
+													</li>
+													{% endif %}
+												</ul>
+											</div>
+											{{ wizard.management_form }}
+											{% if wizard.form.forms %}
+												{{ wizard.form.management_form }}
+												{% for form in wizard.form.forms %}
+													{{ form|crispy }}
+												{% endfor %}
+											{% else %}
+												{{ wizard.form|crispy }}
+											{% endif %}
+											<hr>
+											<div class="d-flex justify-content-between align-items-center">
+												{% if wizard.steps.prev %}
+														<button class="btn btn-sm btn-outline-secondary" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Back</button>
+												{% endif %}
+												<button type="submit" class="btn btn-outline-success w-25">Submit</button>
+											</div>
+										</div>
+										<div class="col-12 text-center">
+											<p class="small mb-0">Already registered? <a href="{% url 'login' %}">Login</a></p>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+	{% endblock %}
+</body>
+</html>
