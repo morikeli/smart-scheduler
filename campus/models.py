@@ -22,7 +22,7 @@ class Student(models.Model):
     """ This model stores info about students records. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     student_name = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
-    school = models.OneToOneField(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
     reg_no = models.CharField(max_length=14, blank=False, db_column='Registration No.')
     year = models.CharField(max_length=10, blank=False, db_column='Year of Study')
     semester = models.CharField(max_length=1, blank=False)
