@@ -5,7 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('auth/', include('accounts.urls')),
-    path('', include('campus.urls')),
+    path('campus/u/', include('campus.urls')),
     path('admin/', admin.site.urls),
 ]
 
