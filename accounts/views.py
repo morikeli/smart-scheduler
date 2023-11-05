@@ -167,5 +167,5 @@ class EditFacultyStaffProfileView(View):
         return render(request, self.template_name, context)
 
 
-class LogoutUser(LogoutView):
-    template_name = 'accounts/logout.html'
+class LogoutUserView(LogoutView):
+    template_name = 'accounts/login.html'
