@@ -23,16 +23,12 @@ class LecturerUnitsBookingForm(forms.ModelForm):
         ('4', 'Fourth years (Seniors)'),
     )
     SELECT_SEMESTER = (
-        (None, '-- Select course name --'),
+        (None, '-- Select semester --'),
         ('1', 'Semester 1'),
         ('2', 'Semester 2'),
     )
     
-    lecturer = forms.ChoiceField(widget=forms.Select(attrs={
-            'type': 'select', 'class': 'mb-2',
-        }),
-    )
-    course_name = forms.ChoiceField(widget=forms.Select(attrs={
+    course_name = forms.CharField(widget=forms.TextInput(attrs={
             'type': 'select', 'class': 'mb-2',
         }),
     )
