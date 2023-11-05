@@ -54,48 +54,6 @@ class LecturerUnitsBookingForm(forms.ModelForm):
         model = BookedUnit
         fields = ['lecturer', 'course_name', 'year_of_study', 'semester']
 
-class LectureSchedulingForm(forms.ModelForm):
-    SELECT_RECURRENCE_PATTERN = (
-        (None, '-- Select one choice'),
-        ('Once', 'Once'),
-        ('Daily', 'Daily'),
-        ('Weekly', 'Weekly'),
-    )
-
-    unit_name = forms.ChoiceField(widget=forms.Select(attrs={
-            'type': 'select', 'class': 'mb-2',
-        }),
-        label='Unit',
-    )
-    lecture_date = forms.DateField(widget=forms.DateInput(attrs={
-            'type': 'date', 'class': 'mb-0',
-        }),
-        help_text='Schedule a date for this lecture',    
-    )
-    start_time = forms.TimeField(widget=forms.TimeInput(attrs={
-            'type': 'time', 'class': 'mb-0',
-        }),
-        help_text='At what time will this lecture begin?',
-        label='Schedule start time',
-    )
-    end_time = forms.TimeField(widget=forms.TimeInput(attrs={
-            'type': 'time', 'class': 'mb-0',
-        }),
-        help_text='At what time will this lecture end?',
-        label='Schedule end time',
-    )
-    recurrence_pattern = forms.ChoiceField(widget=forms.Select(attrs={
-            'type': 'text', 'class': 'mb-0',
-        }),
-        help_text='Schedule lecture once, daily or weekly',
-        label='Recurrence mode',
-        choices=SELECT_RECURRENCE_PATTERN,
-    )
-
-    class Meta:
-        model = Lecture
-        fields = ['unit_name', 'lecture_date', 'start_time', 'end_time', 'recurrence_pattern']
-
 class FeedbackForm(forms.ModelForm):
     SELECT_TYPE_COMPLAINT = (
         (None, '-- Select type of complaint --'),
@@ -130,3 +88,43 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
         fields = ['complaint', 'description', 'rate']
+
+
+# Edit forms
+
+class EditScheduledLectureForm(forms.ModelForm):
+    SELECT_RECURRENCE_PATTERN = (
+        (None, '-- Select one choice --'),
+        ('Once', 'Once'),
+        ('Daily', 'Daily'),
+        ('Weekly', 'Weekly'),
+    )
+
+    lecture_date = forms.DateField(widget=forms.DateInput(attrs={
+            'type': 'date', 'class': 'mb-0',
+        }),
+        help_text='Schedule a date for this lecture',    
+    )
+    start_time = forms.TimeField(widget=forms.TimeInput(attrs={
+            'type': 'time', 'class': 'mb-0',
+        }),
+        help_text='At what time will this lecture begin?',
+        label='Schedule start time',
+    )
+    end_time = forms.TimeField(widget=forms.TimeInput(attrs={
+            'type': 'time', 'class': 'mb-0',
+        }),
+        help_text='At what time will this lecture end?',
+        label='Schedule end time',
+    )
+    recurrence_pattern = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'text', 'class': 'mb-0',
+        }),
+        help_text='Schedule lecture once, daily or weekly',
+        label='Recurrence mode',
+        choices=SELECT_RECURRENCE_PATTERN,
+    )
+
+    class Meta:
+        model = Lecture
+        fields = ['lecture_date', 'start_time', 'end_time', 'recurrence_pattern']
