@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.conf import settings
 
 urlpatterns = [
+    path('auth/', include('accounts.urls')),
     path('', include('campus.urls')),
     path('admin/', admin.site.urls),
 ]
