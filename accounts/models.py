@@ -57,7 +57,7 @@ class Faculty(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.staff
+        return f'{self.staff}'
     
     class Meta:
         ordering = ['staff', 'school']
