@@ -162,7 +162,7 @@ class EditFacultyStaffProfileView(View):
 
         context = {
             'EditProfileForm': editprofile_form,
-            'UpdateFacultyInfoForm': editfaculty_form,
+            'UpdateFacultyDetailsForm': editfaculty_form,
         }
         return render(request, self.template_name, context)
 
