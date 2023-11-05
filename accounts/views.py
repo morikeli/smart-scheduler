@@ -136,7 +136,7 @@ class EditFacultyStaffProfileView(View):
 
     def get(self, request, staff_name, *args, **kwargs):
         editprofile_form = self.profile_form_class(instance=request.user)
-        editfaculty_form = self.student_form_class(instance=request.user.faculty)
+        editfaculty_form = self.faculty_form_class(instance=request.user.faculty)
 
         context = {
             'EditProfileForm': editprofile_form,
@@ -146,7 +146,7 @@ class EditFacultyStaffProfileView(View):
 
     def post(self, request, staff_name, *args, **kwargs):
         editprofile_form = self.profile_form_class(instance=request.user)
-        editfaculty_form = self.student_form_class(instance=request.user.faculty)
+        editfaculty_form = self.faculty_form_class(instance=request.user.faculty)
 
         if editprofile_form.is_valid():
             editprofile_form.save()
