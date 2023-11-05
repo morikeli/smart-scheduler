@@ -95,9 +95,9 @@ class FeedbackForm(forms.ModelForm):
 class EditScheduledLectureForm(forms.ModelForm):
     SELECT_RECURRENCE_PATTERN = (
         (None, '-- Select one choice --'),
-        ('Once', 'Once'),
-        ('Daily', 'Daily'),
-        ('Weekly', 'Weekly'),
+        ('once', 'Once'),
+        ('daily', 'Daily'),
+        ('weekly', 'Weekly'),
     )
 
     lecture_date = forms.DateField(widget=forms.DateInput(attrs={
