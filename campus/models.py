@@ -38,7 +38,7 @@ class Lecture(models.Model):
     """ This db table stores records of all scheduled lectures. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     lecturer = models.ForeignKey(Faculty, on_delete=models.CASCADE, editable=False)
-    lecture_hall = models.ForeignKey('LectureHall', on_delete=models.CASCADE, editable=False)
+    lecture_hall = models.ForeignKey('LectureHall', on_delete=models.CASCADE, editable=False, null=True, db_column='Venue')
     unit_name = models.ForeignKey(BookedUnit, on_delete=models.CASCADE)
     lecture_date = models.DateField(null=False, blank=False)
     start_time = models.TimeField(null=False, blank=False, db_column='Scheduled start time')    # lecture should start at this time
