@@ -45,6 +45,11 @@ class LecturerUnitsBookingForm(forms.ModelForm):
         choices=SELECT_SEMESTER,
     )
 
+    def __init__(self, *args, **kwargs):
+        super(LecturerUnitsBookingForm, self).__init__(*args, **kwargs)
+        # Filter all faculty staff in the OneToOneField dropdown
+        self.fields['lecturer'].queryset = Faculty.objects.filter()
+
     class Meta:
         model = BookedUnit
         fields = ['lecturer', 'course_name', 'year_of_study', 'semester']
