@@ -1,0 +1,127 @@
+{% extends 'dashboard/students/base.html' %}{% block title %}Dashboard{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	{% block content %}
+	<main id="main" class="main">
+		<section class="section dashboard">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="row">
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card units-card">
+								<div class="card-body">
+									<h5 class="card-title">Units <span>| This Semester</span></h5>
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi-mortarboard-fill"></i>
+										</div>
+										<div class="ps-3">
+											<h6>{{ Orders|default:"0" }}</h6>	
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card lectures-card">				
+								<div class="card-body">
+									<h5 class="card-title">Lectures <span>| Today</span></h5>
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi-laptop-fill"></i>
+										</div>
+										<div class="ps-3">
+											<h6>{{ TotalVictims|default:0 }}</h6>
+										</div>
+									</div>
+								</div>
+				
+							</div>
+						</div>
+			
+						
+						<div class="col-12">
+							<div class="card recent-sales overflow-auto">
+								<div class="card-body">
+									<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
+									<table class="table table-bordered table-striped">
+										<thead>
+											<tr class="table-active">
+												<th>#</th>
+												<th>Image</th>
+												<th>Lecturer</th>
+												<th>Unit</th>
+												<th>Venue</th>
+												<th>Date</th>
+												<th>Time</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for lecture in scheduled_lecture %}
+											<tr>
+												<td>{{ forloop.counter }}</td>
+												<td><img src="{{ lecture.staff.profile_pic.url }}" height="15px" width="15px" alt="lecturer-dp"></td>
+												<td>{{ lecture.lecturer }}</td>
+												<td>{{ lecture.unit_name }}</td>
+												<td>{{ lecture.lecture_hall }}</td>
+												<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
+												<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				<div class="col-lg-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Calendar</h5>
+							
+						</div>
+					</div>
+					<div class="card">			
+						<div class="card-body">
+							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
+							<div class="activity">
+								{% for lecture in scheduled_lecture %}
+								<div class="activity-item d-flex">
+									<div class="activity-label">activity</div>
+									<img src="{{ lecture.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
+									<div class="activity-content">
+										<p class="small fst-italic">
+											{{ lecture.unit_name }} is scheduled to start in {{ lecture.start_time|timeuntil }}
+										</p>
+									</div>
+								</div>
+								{% empty %}
+								<div class="activity-item">
+									<h6 class="small fst-italic text-center">
+										There is no scheduled lecture available!
+									</h6>
+								</div>
+								{% endfor %}
+								<hr class="dropdown-divider">
+								<div class="text-center">
+									<a href="" class="badge bg-primary p-2">View all lectures</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>	
+	  </main>
+	{% endblock %}
+</body>
+</html>
