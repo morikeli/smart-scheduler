@@ -9,6 +9,13 @@ SELECT_SCHOOL = (
     ('School of Science, Agriculture & Environmental Science', 'School of Science, Agriculture & Environmental Science (SSAES)'),
 )
 
+SELECT_DEPARTMENT = (
+        (None, '-- Select your department --'),
+        ('Agriculture and Business', 'Agriculture and Business'),
+        ('Biological Sciences', 'Biological Sciences'),
+        ('Mathematics, Statistics & Computing', 'Mathematics, Statistics & Computing'),
+)
+
 class SignupForm(UserCreationForm):
     SELECT_TYPE_USER = [
         (True, 'Student'),
@@ -101,6 +108,11 @@ class StudentRegistrationForm(forms.ModelForm):
         label='School',
         choices=SELECT_SCHOOL,
     )
+    department = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_DEPARTMENT,
+    )
     reg_no = forms.CharField(widget=forms.TextInput(attrs={
             'type': 'text', 'class': 'mb-2',
         }),
@@ -132,15 +144,9 @@ class StudentRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['school', 'reg_no', 'year', 'semester', 'programme', 'course']
+        fields = ['programme', 'course', 'reg_no', 'school', 'department', 'year', 'semester', ]
 
 class FacultyRegistrationForm(forms.ModelForm):
-    SELECT_DEPARTMENT = (
-        (None, '-- Select your department --'),
-        ('Agriculture and Business', 'Agriculture and Business'),
-        ('Biological Sciences', 'Biological Sciences'),
-        ('Mathematics, Statistics & Computing', 'Mathematics, Statistics & Computing'),
-    )
     SELECT_FACULTY_ROLE = (
         (None, '-- Select one choice --'),
         ('HOD', 'Head of Department (HOD)'),
@@ -262,6 +268,12 @@ class EditStudentDetailsForm(forms.ModelForm):
         choices=SELECT_SCHOOL,
         disabled=True,
     )
+    department = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_DEPARTMENT,
+        disabled=True,
+    )
     reg_no = forms.CharField(widget=forms.TextInput(attrs={
             'type': 'text', 'class': 'mb-2',
         }),
@@ -296,15 +308,9 @@ class EditStudentDetailsForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['programme', 'course', 'school', 'reg_no', 'year', 'semester']
+        fields = ['programme', 'course', 'school', 'department', 'reg_no', 'year', 'semester']
 
 class EditFacultyDetailsForm(forms.ModelForm):
-    SELECT_DEPARTMENT = (
-        (None, '-- Select your department --'),
-        ('Agriculture and Business', 'Agriculture and Business'),
-        ('Biological Sciences', 'Biological Sciences'),
-        ('Mathematics, Statistics & Computing', 'Mathematics, Statistics & Computing'),
-    )
     SELECT_FACULTY_ROLE = (
         (None, '-- Select one choice --'),
         ('HOD', 'Head of Department (HOD)'),
