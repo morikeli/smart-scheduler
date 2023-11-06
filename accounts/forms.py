@@ -5,11 +5,8 @@ from django import forms
 from .models import User
 
 SELECT_SCHOOL = (
-        (None, '-- Select your school --'),
-        ('School of Arts, Social Sciences and Business', 'School of Arts, Social Sciences and Business (SASSB)'),
-        ('School of Education', 'School of Education (SE)'),
-        ('School of Information, Communication & Media Studies', 'School of Information, Communication & Media Studies (INFOCOMS)'),
-        ('School of Science, Agriculture & Environmental Science', 'School of Science, Agriculture & Environmental Science (SSAES)'),
+    (None, '-- Select your school --'),
+    ('School of Science, Agriculture & Environmental Science', 'School of Science, Agriculture & Environmental Science (SSAES)'),
 )
 
 class SignupForm(UserCreationForm):
