@@ -322,6 +322,7 @@ class EditFacultyDetailsForm(forms.ModelForm):
             'type': 'select', 'class': 'mb-2',
         }),
         choices=SELECT_DEPARTMENT,
+        disabled=True,
     )
     position = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
