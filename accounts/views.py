@@ -145,8 +145,8 @@ class EditFacultyStaffProfileView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, staff_name, *args, **kwargs):
-        editprofile_form = self.profile_form_class(instance=request.user)
-        editfaculty_form = self.faculty_form_class(instance=request.user.faculty)
+        editprofile_form = self.profile_form_class(request.POST, request.FILES, instance=request.user)
+        editfaculty_form = self.faculty_form_class(request.POST, instance=request.user.faculty)
 
         if editprofile_form.is_valid():
             editprofile_form.save()
