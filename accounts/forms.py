@@ -135,6 +135,12 @@ class StudentRegistrationForm(forms.ModelForm):
         fields = ['school', 'reg_no', 'year', 'semester', 'programme', 'course']
 
 class FacultyRegistrationForm(forms.ModelForm):
+    SELECT_DEPARTMENT = (
+        (None, '-- Select your department --'),
+        ('Agriculture and Business', 'Agriculture and Business'),
+        ('Biological Sciences', 'Biological Sciences'),
+        ('Mathematics, Statistics & Computing', 'Mathematics, Statistics & Computing'),
+    )
     SELECT_FACULTY_ROLE = (
         (None, '-- Select one choice --'),
         ('HOD', 'Head of Department (HOD)'),
@@ -147,9 +153,10 @@ class FacultyRegistrationForm(forms.ModelForm):
         label='School',
         choices=SELECT_SCHOOL,
     )
-    department = forms.CharField(widget=forms.TextInput(attrs={
-            'type': 'text', 'class': 'mb-2',
+    department = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
         }),
+        choices=SELECT_DEPARTMENT,
     )
     position = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
