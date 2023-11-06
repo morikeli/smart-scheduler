@@ -36,6 +36,7 @@ class Student(models.Model):
     year = models.CharField(max_length=10, blank=False, db_column='Year of Study')
     semester = models.CharField(max_length=1, blank=False)
     programme = models.CharField(max_length=35, blank=False)
+    course = models.CharField(max_length=50, blank=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
