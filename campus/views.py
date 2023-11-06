@@ -16,7 +16,7 @@ class StudentHomepageView(View):
 
     def get(self, request, *args, **kwargs):
         total_units = RegisteredUnit.objects.filter(student=request.user.student).count()
-        
+
 
         context = {
             'TotalUnits': total_units,
@@ -82,7 +82,7 @@ class SubmitFeedbackView(View):
 
 # faculty views
 @method_decorator(login_required(login_url='login'), name='get')
-@method_decorator(user_passes_test(lambda user: (user.is_staff is True or user.is_superuser is True) and user.is_student is False), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is False), name='get')
 class FacultyDashboardView(View):
     template_name = 'dashboard/faculty/homepage.html'
 
@@ -98,7 +98,7 @@ class FacultyDashboardView(View):
         return render(request, self.template_name, context)
 
 @method_decorator(login_required(login_url='login'), name='get')
-@method_decorator(user_passes_test(lambda user: (user.is_staff is True or user.is_superuser is True) and user.is_student is False), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is False), name='get')
 class ScheduleLectureView(View):
     template_name = 'dashboard/faculty/schedule-lecture.html'
 
@@ -132,7 +132,7 @@ class ScheduleLectureView(View):
         return redirect('schedule_lecture', staff_id, staff_name)
 
 @method_decorator(login_required(login_url='login'), name='get')
-@method_decorator(user_passes_test(lambda user: (user.is_staff is True or user.is_superuser is True) and user.is_student is False), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is False), name='get')
 class AssignUnitsforLecturersView(View):
     form_class = LecturerUnitsBookingForm
     template_name = 'dashboard/faculty/book-units.html'
@@ -160,7 +160,7 @@ class AssignUnitsforLecturersView(View):
         return render(request, self.template_name, context)
 
 @method_decorator(login_required(login_url='login'), name='get')
-@method_decorator(user_passes_test(lambda user: (user.is_staff is True or user.is_superuser is True) and user.is_student is False), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is False), name='get')
 class LecturesDetailView(View):
     template_name = 'dashboard/faculty/lectures.html'
 
@@ -182,7 +182,7 @@ class LecturesDetailView(View):
         return redirect('lectures_records', staff_name, staff_id)
 
 @method_decorator(login_required(login_url='login'), name='get')
-@method_decorator(user_passes_test(lambda user: (user.is_staff is True or user.is_superuser is True) and user.is_student is False), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is False), name='get')
 class EditScheduledLecturesView(View):
     form_class = EditScheduledLectureForm
     template_name = 'dashboard/faculty/edit.html'
