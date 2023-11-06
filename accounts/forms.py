@@ -130,12 +130,12 @@ class StudentRegistrationForm(forms.ModelForm):
     semester = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
         }),
-        choices=SELECT_SEMESTER,    
+        choices=SELECT_SEMESTER,
     )
 
     class Meta:
         model = Student
-        fields = ['school', 'reg_no', 'year', 'semester', 'programme']
+        fields = ['school', 'reg_no', 'year', 'semester', 'programme', 'course']
 
 class FacultyRegistrationForm(forms.ModelForm):
     SELECT_FACULTY_ROLE = (
