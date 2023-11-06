@@ -77,6 +77,14 @@ class StudentRegistrationForm(forms.ModelForm):
         ('Degree', "Bachelor's Degree"),
         ('Diploma', 'Diploma'),
     )
+    SELECT_STUDENT_COURSE = (
+        (None, '-- Select your course --'),
+        ('Agribusiness', 'Agricultural Business'),
+        ('Applied mathematics', 'Applied Mathematics'),
+        ('Applied statictics', 'Applied Statictics'),
+        ('Computer Science', 'Computer Science'),
+        ('Education', 'Education'),
+    )
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
         ('1st year', 'First year (Freshers)'),
@@ -106,6 +114,12 @@ class StudentRegistrationForm(forms.ModelForm):
         }),
         choices=SELECT_COURSE_PROGRAMME,
         label='Course programme',    
+    )
+    course = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_STUDENT_COURSE,
+        label='Course name',    
     )
     year = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
