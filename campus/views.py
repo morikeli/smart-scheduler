@@ -27,29 +27,33 @@ class StudentHomepageView(View):
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
 class StudentsUnitsRegistrationView(View):
-    form_class = StudentUnitsRegistrationForm
-    template_name = 'students/register-units.html'
+    template_name = 'dashboard/students/register-units.html'
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
+    def get(self, request, student_id, *args, **kwargs):
+        units_QS = BookedUnit.objects.filter(
+            lecturer__department=request.user.student.department,
+            students_course=request.user.student.course,
+        )
+        reg_units_QS = RegisteredUnit.objects.filter(student=request.user.student)
 
-        context = {'UnitRegistrationForm': form}
+        context = {
+            'booked_units': units_QS,
+            'registered_units': reg_units_QS,
+        }
         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+    def post(self, request, student_id, *args, **kwargs):
+        get_unit_field = request.POST.get('register-unit')
 
-        if form.is_valid():
-            new_unit = form.save(commit=False)
-            new_unit.student = request.user.student
-            new_unit.is_registered = True
-            new_unit.save()
+        unit_obj = BookedUnit.objects.get(id=get_unit_field)
+        register_unit = RegisteredUnit.objects.get_or_create(
+            unit=unit_obj,
+            student=request.user.student,
+            is_registered=True,
+        )
 
-            messages.success(request, 'Unit successfully registered!')
-            return redirect('unit_registration')
-
-        context = {'UnitRegistrationForm': form}
-        return render(request, self.template_name, context)
+        messages.success(request, 'Unit successfully registered!')
+        return redirect('unit_registration', student_id)
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
