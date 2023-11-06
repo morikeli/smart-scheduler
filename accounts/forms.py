@@ -234,6 +234,14 @@ class EditStudentDetailsForm(forms.ModelForm):
         ('Degree', "Bachelor's Degree"),
         ('Diploma', 'Diploma'),
     )
+    SELECT_STUDENT_COURSE = (
+        (None, '-- Select your course --'),
+        ('Agribusiness', 'Agricultural Business'),
+        ('Applied mathematics', 'Applied Mathematics'),
+        ('Applied statictics', 'Applied Statictics'),
+        ('Computer Science', 'Computer Science'),
+        ('Education', 'Education'),
+    )
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
         ('1st year', 'First year (Fresher)'),
@@ -267,6 +275,13 @@ class EditStudentDetailsForm(forms.ModelForm):
         label='Course programme',
         disabled=True,
     )
+    course = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_STUDENT_COURSE,
+        label='Course name',
+        disabled=True,    
+    )
     year = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
         }),
@@ -281,9 +296,15 @@ class EditStudentDetailsForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['programme', 'school', 'reg_no', 'year', 'semester']
+        fields = ['programme', 'course', 'school', 'reg_no', 'year', 'semester']
 
 class EditFacultyDetailsForm(forms.ModelForm):
+    SELECT_DEPARTMENT = (
+        (None, '-- Select your department --'),
+        ('Agriculture and Business', 'Agriculture and Business'),
+        ('Biological Sciences', 'Biological Sciences'),
+        ('Mathematics, Statistics & Computing', 'Mathematics, Statistics & Computing'),
+    )
     SELECT_FACULTY_ROLE = (
         (None, '-- Select one choice --'),
         ('HOD', 'Head of Department (HOD)'),
@@ -297,10 +318,10 @@ class EditFacultyDetailsForm(forms.ModelForm):
         choices=SELECT_SCHOOL,
         disabled=True,
     )
-    department = forms.CharField(widget=forms.TextInput(attrs={
-            'type': 'text', 'class': 'mb-2',
+    department = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
         }),
-        disabled=True,
+        choices=SELECT_DEPARTMENT,
     )
     position = forms.ChoiceField(widget=forms.Select(attrs={
             'type': 'select', 'class': 'mb-2',
