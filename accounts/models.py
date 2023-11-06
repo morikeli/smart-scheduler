@@ -45,8 +45,8 @@ class Student(models.Model):
         ordering = ['student_name', 'reg_no']
         verbose_name_plural = 'Students records'
     
-    def __str__(self) -> str or None:
-        return self.student_name
+    def __str__(self) -> str:
+        return f'{self.student_name}'
 
 class Faculty(models.Model):
     """ This db table stores records of all staff in a given faculty. In this case lecturer and HOD are the only members in the faculty. """
