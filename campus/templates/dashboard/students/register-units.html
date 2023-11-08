@@ -22,6 +22,7 @@
                                         <th>Unit name</th>
                                         <th>Lecturer</th>
                                         <th>Image</th>
+                                        <th>Registered</th>
                                     </thead>
                                     <tbody>
                                         {% for units in registered_units %}
@@ -30,6 +31,11 @@
                                             <td>{{ units.unit }}</td>
                                             <td>{{ units.unit.lecturer.staff.first_name|title }} {{ units.unit.lecturer.staff.last_name|title }}</td>
                                             <td class="text-center"><img src="{{ units.unit.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="dp"></td>
+                                            <td class="text-center">
+                                                {% if units.is_registered is True %}
+                                                <span><i class="bi-check-circle-fill" style="color: #0e9437;"></i></span>
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                         {% empty %}
                                         <tr>
@@ -47,6 +53,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Registration form</h5>
                             <form action="" method="post">
+                                {% include 'messages.html' %}
                                 {% csrf_token %}
                                 <div class="col-xl-12 col-lg-12">
                                     <div class="mb-3">
