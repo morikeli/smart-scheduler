@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('homepage/', views.StudentHomepageView.as_view(), name='student_homepage'),
     path('units/<str:student_id>/register/', views.StudentsUnitsRegistrationView.as_view(), name='unit_registration'),
+    path('lecture/<str:lecture_id>/schedule/<str:_student>/confirm/', views.LectureAttendanceConfiramtionView.as_view(), name='confirm_attendance'),
     path('halls/<str:hall_id>/feedback/', views.SubmitFeedbackView.as_view(), name='student_feedback'),
     
     path('dashboard/', views.FacultyDashboardView.as_view(), name='faculty_homepage'),
