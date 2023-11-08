@@ -124,6 +124,18 @@ class LectureAttendanceConfiramtionView(View):
         
         }
         return render(request, self.template_name, context)
+    
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
+class StudentsLecturesDetailView(View):
+    template_name = 'dashboard/students/lectures.html'
+    def get(self, request, _student, *args, **kwargs):
+        lectures_QS = Lecture.objects.filter(
+            lecturer__department=request.user.student.department, unit_name__students_course=request.user.student.course,
+        ).order_by('-lecture_date', '-start_time', 'unit_name')
+
+        context = {'scheduled_lectures': lectures_QS}
+        return render(request, self.template_name, context)
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
