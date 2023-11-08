@@ -27,10 +27,23 @@ class StudentHomepageView(View):
             unit_name__students_course=request.user.student.course,
         ).order_by('-lecture_date', '-start_time', 'unit_name')
 
+        events = Lecture.objects.filter(
+            lecturer__department=request.user.student.department,
+            unit_name__students_course=request.user.student.course,
+        )
+        event_data = []
+        for event in events:
+            event_data.append({
+                'title': str(event.unit_name),  # Use appropriate field from your Lecture model
+                'start': event.lecture_date.strftime('%Y-%m-%d') + 'T' + event.start_time.strftime('%H:%M:%S'),
+                'end': event.lecture_date.strftime('%Y-%m-%d') + 'T' + event.end_time.strftime('%H:%M:%S'),
+            })
+    
         context = {
             'TotalUnits': total_units,
             'TotalLectures': total_lectures,
             'scheduled_lectures': scheduled_lectures_QS,
+            'events': event_data,
         }
         return render(request, self.template_name, context)
 
