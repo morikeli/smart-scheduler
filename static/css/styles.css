@@ -1,21 +1,21 @@
 :root {
-  scroll-behavior: smooth;
+  	scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
-  background: #f6f9ff;
-  color: #444444;
+	font-family: "Open Sans", sans-serif;
+	background: #f6f9ff;
+	color: #444444;
 }
 
 a {
-  color: #4154f1;
-  text-decoration: none;
+	color: #4154f1;
+	text-decoration: none;
 }
 
 a:hover {
-  color: #717ff5;
-  text-decoration: none;
+	color: #717ff5;
+	text-decoration: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,6 +32,19 @@ h1, h2, h3, h4, h5, h6 {
 	#main {
 		padding: 20px 30px;
 	}
+}
+
+#calendar .fc-toolbar-title {
+    font-size: 18px; /* Adjust the font size to your preference */
+}
+#calendar .fc-today-button {
+	font-size: 10px;
+}
+#calendar .fc-button-group .fc-prev-button {
+	font-size: 10px;
+}
+#calendar .fc-button-group .fc-next-button {
+	font-size: 10px;
 }
 
 *form > label {
