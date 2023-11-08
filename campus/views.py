@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
 from .models import BookedUnit, Lecture, LectureHall, RegisteredUnit
-from accounts.models import Faculty
 from datetime import datetime as dt
+
 
 # students views
 @method_decorator(login_required(login_url='login'), name='get')
