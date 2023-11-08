@@ -39,6 +39,7 @@ class Lecture(models.Model):
     """ This db table stores records of all scheduled lectures. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     lecturer = models.ForeignKey(Faculty, on_delete=models.CASCADE, editable=False)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, editable=False)
     lecture_hall = models.ForeignKey('LectureHall', on_delete=models.CASCADE, editable=False, null=True, db_column='Venue')
     unit_name = models.ForeignKey(BookedUnit, on_delete=models.CASCADE)
     lecture_date = models.DateField(null=False, blank=False)
@@ -46,6 +47,7 @@ class Lecture(models.Model):
     end_time = models.TimeField(null=False, blank=False, db_column='Scheduled end time')     # lecture should end at this time
     recurrence_pattern = models.CharField(max_length=10, blank=False)
     total_students = models.PositiveIntegerField(default=0, editable=False)     # approximate no. of students expected to attend the lecture.
+    is_attending = models.BooleanField(default=False)   # is the student attending the lecture?
     is_taught = models.BooleanField(default=False, editable=False)  # was the class taught or it "bounced".
     date_scheduled = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
