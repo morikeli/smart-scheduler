@@ -1,4 +1,4 @@
-from .forms import EditScheduledLectureForm, FeedbackForm, LecturerUnitsBookingForm, StudentUnitsRegistrationForm
+from .forms import EditScheduledLectureForm, FeedbackForm, LecturerUnitsBookingForm, StudentsAttendanceConfirmationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
@@ -6,21 +6,82 @@ from django.contrib import messages
 from django.views import View
 from .models import BookedUnit, Lecture, LectureHall, RegisteredUnit
 from accounts.models import Faculty
-
+from datetime import datetime as dt
 
 # students views
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
 class StudentHomepageView(View):
+    form_class = StudentsAttendanceConfirmationForm
     template_name = 'dashboard/students/homepage.html'
 
     def get(self, request, *args, **kwargs):
         total_units = RegisteredUnit.objects.filter(student=request.user.student).count()
-
+        total_lectures = Lecture.objects.filter(
+            lecturer__department=request.user.student.department,
+            lecture_date=dt.now().strftime('%Y-%m-%d'),
+        ).count()
+        
+        scheduled_lectures_QS = Lecture.objects.filter(
+            lecturer__department=request.user.student.department,
+            unit_name__students_course=request.user.student.course,
+        ).order_by('-lecture_date', '-start_time', 'unit_name')
 
         context = {
             'TotalUnits': total_units,
+            'TotalLectures': total_lectures,
+            'scheduled_lectures': scheduled_lectures_QS,
+        }
+        return render(request, self.template_name, context)
 
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
+class LectureAttendanceConfiramtionView(View):
+    form_class = StudentsAttendanceConfirmationForm
+    template_name = 'dashboard/students/confirm-attendance.html'
+
+    def get(self, request, lecture_id, _student, *args, **kwargs):
+        lec_obj = Lecture.objects.get(id=lecture_id)
+        form = self.form_class(instance=lec_obj)
+        scheduled_lectures_QS = Lecture.objects.filter(
+            lecturer__department=request.user.student.department,
+            unit_name__students_course=request.user.student.course,
+            student=None,
+        ).order_by('-lecture_date', '-start_time', 'unit_name')
+
+
+        context = {
+            'AttendanceConfirmationForm': form,
+            'scheduled_lectures': scheduled_lectures_QS,
+            'lec_obj': lec_obj,
+
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, lecture_id, _student, *args, **kwargs):
+        scheduled_lectures_QS = Lecture.objects.filter(
+            lecturer__department=request.user.student.department,
+            unit_name__students_course=request.user.student.course,
+            student=None,
+        ).order_by('-lecture_date', '-start_time', 'unit_name')
+        
+        lec_obj = Lecture.objects.get(id=lecture_id)        
+        form = self.form_class(request.POST, instance=lec_obj)
+        
+        if form.is_valid():
+            confirmation = form.save(commit=False)
+            confirmation.student = request.user.student
+            confirmation.total_students += 1
+            confirmation.save()
+
+            messages.success(request, 'Confirmation submitted succesfully!')
+            return redirect('confirm_attendance', lecture_id, _student)
+
+        context = {
+            'AttendanceConfirmationForm': form,
+            'scheduled_lectures': scheduled_lectures_QS,
+            'lec_obj': lec_obj,
+        
         }
         return render(request, self.template_name, context)
 
