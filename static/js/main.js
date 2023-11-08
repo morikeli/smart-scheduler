@@ -69,18 +69,6 @@
 		onscroll(document, toggleBacktotop)
 	}
 
-	// autoresize echart charts
-	const mainContainer = select('#main');
-	if (mainContainer) {
-		setTimeout(() => {
-		new ResizeObserver(function() {
-			select('.echart', true).forEach(getEchart => {
-			echarts.getInstanceByDom(getEchart).resize();
-			})
-		}).observe(mainContainer);
-		}, 200);
-	}
-	
 	// Preloader
 	let preloader = select('#preloader');
 	if (preloader) {
