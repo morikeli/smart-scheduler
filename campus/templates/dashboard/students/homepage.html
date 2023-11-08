@@ -1,5 +1,5 @@
 {% extends 'dashboard/students/base.html' %}{% block title %}Dashboard{% endblock %}
-{% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +22,7 @@
 											<i class="bi-mortarboard-fill"></i>
 										</div>
 										<div class="ps-3">
-											<h6>{{ Orders|default:"0" }}</h6>	
+											<h6>{{ TotalUnits|default:"0" }}</h6>	
 										</div>
 									</div>
 								</div>
@@ -38,45 +38,56 @@
 											<i class="bi-laptop-fill"></i>
 										</div>
 										<div class="ps-3">
-											<h6>{{ TotalVictims|default:0 }}</h6>
+											<h6>{{ TotalLectures|default:0 }}</h6>
 										</div>
 									</div>
 								</div>
 				
 							</div>
 						</div>
-			
 						
 						<div class="col-12">
 							<div class="card recent-sales overflow-auto">
 								<div class="card-body">
-									<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
-									<table class="table table-bordered table-striped">
-										<thead>
-											<tr class="table-active">
-												<th>#</th>
-												<th>Image</th>
-												<th>Lecturer</th>
-												<th>Unit</th>
-												<th>Venue</th>
-												<th>Date</th>
-												<th>Time</th>
-											</tr>
-										</thead>
-										<tbody>
-											{% for lecture in scheduled_lecture %}
-											<tr>
-												<td>{{ forloop.counter }}</td>
-												<td><img src="{{ lecture.staff.profile_pic.url }}" height="15px" width="15px" alt="lecturer-dp"></td>
-												<td>{{ lecture.lecturer }}</td>
-												<td>{{ lecture.unit_name }}</td>
-												<td>{{ lecture.lecture_hall }}</td>
-												<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
-												<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
-											</tr>
-											{% endfor %}
-										</tbody>
-									</table>
+									<h5 class="card-title">Scheduled lectures</h5>
+									<div class="table-responsive">
+										<table class="table table-bordered table-striped">
+											<thead>
+												<tr class="table-active">
+													<th>#</th>
+													<th>Image</th>
+													<th>Lecturer</th>
+													<th>Unit</th>
+													<th>Date</th>
+													<th>Time</th>
+													<th>Venue</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for lecture in scheduled_lectures %}
+												<tr>
+													<td>{{ forloop.counter }}</td>
+													<td><img src="{{ lecture.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="lecturer-dp"></td>
+													<td>{{ lecture.lecturer.staff.first_name|title }} {{ lecture.lecturer.staff.last_name|title }}</td>
+													<td>{{ lecture.unit_name }}</td>
+													<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
+													<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+													<td>
+														{% if lecture.is_attending is False %}
+														<a href="{% url 'confirm_attendance' lecture.id request.user.student %}">
+															<span class="badge bg-danger"><i class="bi-exclamation-triangle-fill"></i> Click me</span>
+														</a>
+														{% elif lecture.lecture_hall is None %}
+														<span class="badge bg-primary">Allocation pending</span>
+														{% else %}
+														{{ lecture.lecture_hall|default:" -- " }}
+														{% endif %}
+													</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -87,20 +98,20 @@
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">Calendar</h5>
-							
+							<div id="calendar"></div>
 						</div>
 					</div>
 					<div class="card">			
 						<div class="card-body">
 							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
 							<div class="activity">
-								{% for lecture in scheduled_lecture %}
+								{% for lecture in scheduled_lectures %}
 								<div class="activity-item d-flex">
-									<div class="activity-label">activity</div>
-									<img src="{{ lecture.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
+									<div class="activity-label">{{ lecture.date_scheduled|timesince|slice:":5" }} ago</div>
+									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
 									<div class="activity-content">
 										<p class="small fst-italic">
-											{{ lecture.unit_name }} is scheduled to start in {{ lecture.start_time|timeuntil }}
+											{{ lecture.unit_name }} is scheduled to start in <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> at <b>{{ lecture.start_time|date:"H:i A" }}</b>
 										</p>
 									</div>
 								</div>
@@ -113,7 +124,7 @@
 								{% endfor %}
 								<hr class="dropdown-divider">
 								<div class="text-center">
-									<a href="" class="badge bg-primary p-2">View all lectures</a>
+									<a href="{% url 'student_lecture_records' request.user.student %}" class="badge bg-primary p-2">View more</a>
 								</div>
 							</div>
 						</div>
