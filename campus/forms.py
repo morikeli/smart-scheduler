@@ -14,6 +14,38 @@ class StudentUnitsRegistrationForm(forms.ModelForm):
         model = RegisteredUnit
         fields = ['unit']
 
+class StudentsAttendanceConfirmationForm(forms.ModelForm):
+    lecture_date = forms.DateField(widget=forms.DateInput(attrs={
+            'type': 'date', 'class': 'mb-0',
+        }),
+        help_text='Schedule a date for this lecture',
+        disabled=True,
+    )
+    start_time = forms.TimeField(widget=forms.TimeInput(attrs={
+            'type': 'time', 'class': 'mb-0',
+        }),
+        help_text='At what time will this lecture begin?',
+        label='Schedule start time',
+        disabled=True,
+    )
+    end_time = forms.TimeField(widget=forms.TimeInput(attrs={
+            'type': 'time', 'class': 'mb-0',
+        }),
+        help_text='At what time will this lecture end?',
+        label='Schedule end time',
+        disabled=True,
+    )
+    is_attending = forms.BooleanField(widget=forms.CheckboxInput(attrs={
+            'type': 'checkbox', 'class': 'my-2',
+        }),
+        help_text='I will be attending the class',
+        required=True,
+    )
+
+    class Meta:
+        model = Lecture
+        fields = ['lecture_date', 'start_time', 'end_time', 'is_attending']
+
 class LecturerUnitsBookingForm(forms.ModelForm):
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
