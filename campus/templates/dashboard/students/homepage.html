@@ -1,4 +1,5 @@
 {% extends 'dashboard/students/base.html' %}{% block title %}Dashboard{% endblock %}
+{% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -99,8 +100,10 @@
 						<div class="card-body">
 							<h5 class="card-title">Calendar</h5>
 							<div id="calendar"></div>
+							<input type="hidden" id="events" value="{{ events_json|safe }}" name="events-list">
 						</div>
 					</div>
+
 					<div class="card">			
 						<div class="card-body">
 							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
@@ -131,8 +134,60 @@
 					</div>
 				</div>
 			</div>
-		</section>	
-	  </main>
+		</section>
+		
+		{% comment %}
+		<script>
+			fetch('/homepage/')  // URL to fetch events from your Django view
+				.then(response => response.json())
+				.then(data => {
+					// Data is an array of events obtained from the backend
+					// Iterate through the events and add them to the calendar
+					data.forEach(function(event) {
+						calendar.addEvent({
+							//title: event.title,
+							start: event.start,
+							end: event.end
+						});
+					});
+				})
+				.catch(error => console.error('Error fetching events:', error));
+			
+			document.addEventListener('DOMContentLoaded', function() {
+				var calendarEl = document.getElementById('calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					// Other FullCalendar options and callbacks can be added here
+				});
+				calendar.render();
+			});
+
+		</script>
+		{% endcomment %}
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var calendarEl = document.getElementById('calendar');
+				var events_data = document.getElementById('events')
+				var events = [];
+				for (var i = 0; i < events_data.value; i++) {
+					events.push({
+						title: events_data[i].title,
+						start: events_data[i].start_date,
+						end: events_data[i].end_date
+					});
+				}
+				console.log(events_data.value)
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth', // or 'timeGridWeek', 'timeGridDay', etc.
+					events: events_data
+					// calendar.setOption('events', events_data);
+					
+				});
+				calendar.render();
+				console.log(events_data)
+
+			});
+		</script>
+	</main>
 	{% endblock %}
 </body>
 </html>
