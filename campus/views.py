@@ -202,7 +202,7 @@ class ScheduleLectureView(View):
     template_name = 'dashboard/faculty/schedule-lecture.html'
 
     def get(self, request, staff_id, staff_name, *args, **kwargs):
-        booked_units_QS = BookedUnit.objects.filter(lecturer=request.user.faculty)
+        booked_units_QS = BookedUnit.objects.filter(lecturer=staff_id)
 
         context = {
             'booked_units': booked_units_QS,
