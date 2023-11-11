@@ -47,6 +47,14 @@ class StudentsAttendanceConfirmationForm(forms.ModelForm):
         fields = ['lecture_date', 'start_time', 'end_time', 'is_attending']
 
 class LecturerUnitsBookingForm(forms.ModelForm):
+    SELECT_STUDENT_COURSE = (
+        (None, '-- Select your course --'),
+        ('Agribusiness', 'Agricultural Business'),
+        ('Applied mathematics', 'Applied Mathematics'),
+        ('Applied statictics', 'Applied Statictics'),
+        ('Computer Science', 'Computer Science'),
+        ('Education', 'Education'),
+    )
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
         ('1', 'First years (Freshers)'),
@@ -61,20 +69,30 @@ class LecturerUnitsBookingForm(forms.ModelForm):
     )
     
     course_name = forms.CharField(widget=forms.TextInput(attrs={
-            'type': 'select', 'class': 'mb-2',
+            'type': 'select', 'class': 'mb-0',
         }),
+        label='Unit name',
+        help_text='Enter the name of the unit (<b>Enter course code & course title</b>)<br>'
     )
-    
+    students_course = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-0',
+        }),
+        choices=SELECT_STUDENT_COURSE,
+        label='Students course group',
+        help_text='Which students will be studying this unit?'
+    )
     year_of_study = forms.ChoiceField(widget=forms.Select(attrs={
-            'type': 'select', 'class': 'mb-2',
+            'type': 'select', 'class': 'mb-0',
         }),
         choices=SELECT_YEAR_OF_STUDY,
         label='Year of study',
+        help_text='This unit will be studied by students of which year?',
     )
     semester = forms.ChoiceField(widget=forms.Select(attrs={
-            'type': 'select', 'class': 'mb-2',
+            'type': 'select', 'class': 'mb-0',
         }),
         choices=SELECT_SEMESTER,
+        help_text='This unit will be studied by students of which semester?',
     )
 
     def __init__(self, *args, **kwargs):
@@ -84,7 +102,7 @@ class LecturerUnitsBookingForm(forms.ModelForm):
 
     class Meta:
         model = BookedUnit
-        fields = ['lecturer', 'course_name', 'year_of_study', 'semester']
+        fields = ['lecturer', 'course_name', 'students_course',  'year_of_study', 'semester']
 
 class FeedbackForm(forms.ModelForm):
     SELECT_TYPE_COMPLAINT = (
