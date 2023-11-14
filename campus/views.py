@@ -248,7 +248,7 @@ class ScheduleLectureView(View):
                 messages.error(request, 'Time too short! Time should range between 30 minutes and 3 hours.')
 
             elif time_difference_hours > 3:
-                messages.error(request, 'A lecture MUST be 3 hours maximum!')
+                messages.error(request, 'A lecture MUST not exceed 3 hours!')
             
         else:
             unit_obj = BookedUnit.objects.get(id=data_unit_name)
