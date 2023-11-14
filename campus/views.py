@@ -251,20 +251,27 @@ class ScheduleLectureView(View):
                 messages.error(request, 'A lecture MUST not exceed 3 hours!')
             
             else:
-                unit_obj = BookedUnit.objects.get(id=data_unit_name)
+                get_lecture_record = Lecture.objects.filter(lecture_date=data_lec_date, start_time__gte=data_start_time, end_time__lte=data_end_time).exists()  # check if there is a time overlap between the lectures
 
-                new_scheduled_lecture = Lecture.objects.create(
-                    lecturer=request.user.faculty,
-                    unit_name=unit_obj,
-                    lecture_date=data_lec_date,
-                    start_time=data_start_time,
-                    end_time=data_end_time,
-                    recurrence_pattern=data_pattern,
-                )
-                new_scheduled_lecture.save()
+                if get_lecture_record is True:
+                    messages.error(request, f'You have a scheduled lecture at this date: {data_lec_date} at {str(data_start_time).replace(":", "")}HRS - {str(data_end_time).replace(":", "")}HRS')
+                
+                # save scheduled lecture if there is no time overlap between an existing lecture and the pending lectur
+                else:
+                    unit_obj = BookedUnit.objects.get(id=data_unit_name)
 
-                messages.success(request, 'Lecture successfully scheduled!')
-                return redirect('schedule_lecture', staff_id, staff_name)
+                    new_scheduled_lecture = Lecture.objects.create(
+                        lecturer=request.user.faculty,
+                        unit_name=unit_obj,
+                        lecture_date=data_lec_date,
+                        start_time=data_start_time,
+                        end_time=data_end_time,
+                        recurrence_pattern=data_pattern,
+                    )
+                    new_scheduled_lecture.save()
+
+                    messages.success(request, 'Lecture successfully scheduled!')
+                    return redirect('schedule_lecture', staff_id, staff_name)
         
         context = {'booked_units': booked_units_QS,}
         return render(request, self.template_name, context)
