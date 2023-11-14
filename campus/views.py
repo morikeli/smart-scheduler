@@ -68,12 +68,6 @@ class StudentsUnitsRegistrationView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, student_id, *args, **kwargs):
-        units_QS = BookedUnit.objects.filter(
-            lecturer__department=request.user.student.department,
-            students_course=request.user.student.course,
-            year_of_study=request.user.student.year,
-            semester=request.user.student.semester,
-        )
         get_unit_field = request.POST.get('register-unit')
 
         unit_obj = BookedUnit.objects.get(id=get_unit_field)
