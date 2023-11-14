@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
 from .models import BookedUnit, Lecture, LectureHall, RegisteredUnit
-from datetime import datetime as dt
+from datetime import time, datetime as dt
 
 
 # students views
@@ -212,25 +212,62 @@ class ScheduleLectureView(View):
         return render(request, self.template_name, context)
     
     def post(self, request, staff_id, staff_name, *args, **kwargs):
+        booked_units_QS = BookedUnit.objects.filter(lecturer=staff_id)
         data_unit_name = request.POST.get('unit-name')
         data_lec_date = request.POST.get('lecture-date')
         data_start_time = request.POST.get('start-time')
         data_end_time = request.POST.get('end-time')
         data_pattern = request.POST.get('recurrence-pattern')
 
-        unit_obj = BookedUnit.objects.get(id=data_unit_name)
-        new_scheduled_lecture = Lecture.objects.create(
-            lecturer=request.user.faculty,
-            unit_name=unit_obj,
-            lecture_date=data_lec_date,
-            start_time=data_start_time,
-            end_time=data_end_time,
-            recurrence_pattern=data_pattern,
+        # datetime() and time() have parameters. In this case we have to assign this parameters values from a HTML form.
+        # datetime() which in this case, is renamed to dt, has parameters - year, month, day
+        # time() has parameters - hour, minute
+        lecture_scheduled_date = dt(year=int(data_lec_date[:4]), month=int(data_lec_date[5:7]), day=int(data_lec_date[-2:]))  # assign year, month, day from the HTML form input type="date"
+        lecture_start_time = time(hour=int(data_start_time[:2]), minute=int(data_start_time[-2:]))  # hour and minute of the scheduled lecture
+        lecture_end_time = time(hour=int(data_end_time[:2]), minute=int(data_end_time[-2:]))    # end hour and minute of the scheduled lecture.
 
-        ).save()
+        # A scheduled lecture SHOULD range from the current date to two weeks i.e. 14 days from the current date.
+        # For example, if a lecture is scheduled to be taught on Nov. 20, 2023 it should be in the range of current date, Nov. 14, 2023 - Nov. 28, 2023.
+        if (lecture_scheduled_date.strftime('%Y-%m-%d') < dt.now().strftime("%Y-%m-%d")) or (elapsed_days:=(lecture_scheduled_date.day - dt.now().day)) > 14:
+            messages.error(request, 'Invalid date input! Date should range from current date to 14 days after current date.')
         
-        messages.success(request, 'Lecture successfully scheduled!')
-        return redirect('schedule_lecture', staff_id, staff_name)
+        elif (str(lecture_start_time) < dt.now().strftime("%H:%M")) or ():
+            messages.error(request, 'Invalid time input! Enter time ahead of current time.')
+
+        elif lecture_end_time > lecture_start_time:   # check if the end_time is greater than start_time.
+            time_difference_hours = lecture_end_time.hour - lecture_start_time.hour
+            time_difference_minutes = lecture_end_time.minute - lecture_start_time.minute
+
+            # adjust for negative values.
+            if time_difference_minutes < 0:
+                time_difference_minutes += 60
+                time_difference_hours -= 1
+            
+            # check if time is less than 30 minutes.
+            if time_difference_hours == 0 or time_difference_minutes < 30:
+                messages.error(request, 'Time too short! Time should range between 30 minutes and 3 hours.')
+
+            elif time_difference_hours > 3:
+                messages.error(request, 'A lecture MUST be 3 hours maximum!')
+            
+        else:
+            unit_obj = BookedUnit.objects.get(id=data_unit_name)
+
+            new_scheduled_lecture = Lecture.objects.create(
+                lecturer=request.user.faculty,
+                unit_name=unit_obj,
+                lecture_date=data_lec_date,
+                start_time=data_start_time,
+                end_time=data_end_time,
+                recurrence_pattern=data_pattern,
+            )
+            new_scheduled_lecture.save()
+
+            messages.success(request, 'Lecture successfully scheduled!')
+            return redirect('schedule_lecture', staff_id, staff_name)
+        
+        context = {'booked_units': booked_units_QS,}
+        return render(request, self.template_name, context)
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is False), name='get')
