@@ -194,7 +194,6 @@ class FacultyDashboardView(View):
         context = {
             'TotalBookedUnits': total_booked_units,
             'scheduled_lectures': scheduled_lectures_QS,
-
         }
         return render(request, self.template_name, context)
 
