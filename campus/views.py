@@ -91,7 +91,7 @@ class StudentsUnitsRegistrationView(View):
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
-class LectureAttendanceConfiramtionView(View):
+class LectureAttendanceConfirmationView(View):
     form_class = StudentsAttendanceConfirmationForm
     template_name = 'dashboard/students/confirm-attendance.html'
 
