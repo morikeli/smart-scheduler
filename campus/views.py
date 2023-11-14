@@ -68,6 +68,12 @@ class StudentsUnitsRegistrationView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, student_id, *args, **kwargs):
+        units_QS = BookedUnit.objects.filter(
+            lecturer__department=request.user.student.department,
+            students_course=request.user.student.course,
+            year_of_study=request.user.student.year,
+            semester=request.user.student.semester,
+        )
         get_unit_field = request.POST.get('register-unit')
 
         unit_obj = BookedUnit.objects.get(id=get_unit_field)
@@ -76,18 +82,19 @@ class StudentsUnitsRegistrationView(View):
             if get_reg_unit is True:
                 messages.warning(request, 'Selected unit already registered!')
                 return redirect('unit_registration', student_id)
-        
-        except RegisteredUnit.DoesNotExist:
-            register_unit = RegisteredUnit.objects.get_or_create(
-                unit=unit_obj,
-                student=request.user.student,
-                is_registered=True,
-            )
+            
+            else:
+                register_unit = RegisteredUnit.objects.get_or_create(    
+                    unit=unit_obj,
+                    student=request.user.student,
+                    is_registered=True,
+                )
 
-            messages.success(request, 'Unit successfully registered!')
+                messages.success(request, 'Unit successfully registered!')
+                return redirect('unit_registration', student_id)
+        except RegisteredUnit.DoesNotExist:
+            messages.error(request, 'Unknown error occured! Contact system administrator')
             return redirect('unit_registration', student_id)
-        
-        return render(request, self.template_name)
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
