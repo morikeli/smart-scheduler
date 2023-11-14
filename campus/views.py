@@ -233,6 +233,9 @@ class ScheduleLectureView(View):
         
         elif (str(lecture_start_time) < dt.now().strftime("%H:%M")) and (lecture_scheduled_date.strftime('%Y-%m-%d') < dt.now().strftime("%Y-%m-%d")):
             messages.error(request, 'Invalid time input! Enter time past current date and time.')
+        
+        elif (lecture_scheduled_date.weekday() == 5) or (lecture_scheduled_date.weekday() == 6):
+            messages.error(request, 'Cannot schedule a lecture on a weekend!')
 
         elif lecture_end_time > lecture_start_time:   # check if the end_time is greater than start_time and get time difference.
             time_difference_hours = lecture_end_time.hour - lecture_start_time.hour
