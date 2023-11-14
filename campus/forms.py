@@ -57,10 +57,10 @@ class LecturerUnitsBookingForm(forms.ModelForm):
     )
     SELECT_YEAR_OF_STUDY = (
         (None, '-- Select year of study --'),
-        ('1', 'First years (Freshers)'),
-        ('2', 'Second years (Sophomores)'),
-        ('3', 'Third years (Juniors)'),
-        ('4', 'Fourth years (Seniors)'),
+        ('1st year', 'First years (Freshers)'),
+        ('2nd year', 'Second years (Sophomores)'),
+        ('3rd year', 'Third years (Juniors)'),
+        ('4th year', 'Fourth years (Seniors)'),
     )
     SELECT_SEMESTER = (
         (None, '-- Select semester --'),
