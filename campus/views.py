@@ -251,7 +251,6 @@ class ScheduleLectureView(View):
                 messages.error(request, 'A lecture MUST not exceed 3 hours!')
             
             else:
-                print('[ELSE] block ...')
                 unit_obj = BookedUnit.objects.get(id=data_unit_name)
 
                 new_scheduled_lecture = Lecture.objects.create(
