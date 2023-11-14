@@ -231,10 +231,10 @@ class ScheduleLectureView(View):
         if (lecture_scheduled_date.strftime('%Y-%m-%d') < dt.now().strftime("%Y-%m-%d")) or (elapsed_days:=(lecture_scheduled_date.day - dt.now().day)) > 14:
             messages.error(request, 'Invalid date input! Date should range from current date to 14 days after current date.')
         
-        elif (str(lecture_start_time) < dt.now().strftime("%H:%M")) or ():
-            messages.error(request, 'Invalid time input! Enter time ahead of current time.')
+        elif (str(lecture_start_time) < dt.now().strftime("%H:%M")) and (lecture_scheduled_date.strftime('%Y-%m-%d') < dt.now().strftime("%Y-%m-%d")):
+            messages.error(request, 'Invalid time input! Enter time past current date and time.')
 
-        elif lecture_end_time > lecture_start_time:   # check if the end_time is greater than start_time.
+        elif lecture_end_time > lecture_start_time:   # check if the end_time is greater than start_time and get time difference.
             time_difference_hours = lecture_end_time.hour - lecture_start_time.hour
             time_difference_minutes = lecture_end_time.minute - lecture_start_time.minute
 
@@ -244,27 +244,28 @@ class ScheduleLectureView(View):
                 time_difference_hours -= 1
             
             # check if time is less than 30 minutes.
-            if time_difference_hours == 0 or time_difference_minutes < 30:
+            if (time_difference_hours == 0) and (time_difference_minutes < 30):
                 messages.error(request, 'Time too short! Time should range between 30 minutes and 3 hours.')
 
             elif time_difference_hours > 3:
                 messages.error(request, 'A lecture MUST not exceed 3 hours!')
             
-        else:
-            unit_obj = BookedUnit.objects.get(id=data_unit_name)
+            else:
+                print('[ELSE] block ...')
+                unit_obj = BookedUnit.objects.get(id=data_unit_name)
 
-            new_scheduled_lecture = Lecture.objects.create(
-                lecturer=request.user.faculty,
-                unit_name=unit_obj,
-                lecture_date=data_lec_date,
-                start_time=data_start_time,
-                end_time=data_end_time,
-                recurrence_pattern=data_pattern,
-            )
-            new_scheduled_lecture.save()
+                new_scheduled_lecture = Lecture.objects.create(
+                    lecturer=request.user.faculty,
+                    unit_name=unit_obj,
+                    lecture_date=data_lec_date,
+                    start_time=data_start_time,
+                    end_time=data_end_time,
+                    recurrence_pattern=data_pattern,
+                )
+                new_scheduled_lecture.save()
 
-            messages.success(request, 'Lecture successfully scheduled!')
-            return redirect('schedule_lecture', staff_id, staff_name)
+                messages.success(request, 'Lecture successfully scheduled!')
+                return redirect('schedule_lecture', staff_id, staff_name)
         
         context = {'booked_units': booked_units_QS,}
         return render(request, self.template_name, context)
