@@ -30,3 +30,16 @@ def generate_lecture_hallID(sender, instance, **kwargs):
 def generate_registered_unitID(sender, instance, **kwargs):
     if instance.id == '':
         instance.id = str(uuid.uuid4()).replace('-', '')[:30]
+
+@dispatch.receiver(pre_save, sender=Notification)
+def generate_notificationsID(sender, instance, **kwargs):
+    if instance.id == '':
+        instance.id = str(uuid.uuid4()).replace('-', '')[:30]
+
+@dispatch.receiver(post_save, sender=Lecture)
+def save_lecture_record(sender, instance, created, **kwargs):
+    if created:
+        # Schedule the class when a new class is created
+        if instance.recurrence_pattern == 'once': pass
+        else:
+            schedule_recurring_lectures()   # check if instance is a recurring lecture. If True, call schedule_recurring_lectures()
