@@ -75,7 +75,7 @@
 									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
 									<div class="activity-content">
 										<p class="small fst-italic">
-											<b>{{ lecture.unit_name }}</b> is scheduled for date <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> to start at <b>{{ lecture.start_time }}</b>
+											You scheduled <b>{{ lecture.unit_name }}</b> is scheduled for date <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> to start at <b>{{ lecture.start_time }}</b>
 										</p>
 									</div>
 								</div>
@@ -96,26 +96,5 @@
 				</div>
 			</div>
 		</section>
-		
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				var calendarEl = document.getElementById('calendar');
-				var calendar = new FullCalendar.Calendar(calendarEl, {
-					// Customize your calendar options here
-					// For example, you can add events, set initial view, etc.
-					events: [
-						{
-							title: 'Event 1',
-							start: '2023-11-01'
-						},
-						{
-							title: 'Event 2',
-							start: '2023-11-05'
-						}
-					]
-				});
-				calendar.render();
-			});
-		</script>
 	</main>
 	{% endblock %}
