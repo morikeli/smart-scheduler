@@ -56,12 +56,25 @@ class Lecture(models.Model):
         ordering = ['lecturer', 'lecture_hall', '-date_scheduled']
         verbose_name_plural = 'Scheduled lectures'
 
+class Notification(models.Model):
+    id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
+    message = models.CharField(max_length=100)
+    scheduled_lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, editable=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f'{self.scheduled_lecture.unit_name}'
+    
+    class Meta:
+        ordering = ['-date_created', 'message']
+        verbose_name_plural = 'Notifications'
+
 class LectureHall(models.Model):
     """ This db table stores records of all available lecture halls in the entire institution. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     academic_block = models.CharField(max_length=20, blank=False)
     hall_no = models.CharField(max_length=5, blank=False)
-    seating_capacity = models.PositiveIntegerField(default=0, editable=False)
+    seating_capacity = models.PositiveIntegerField(default=0)
     floor = models.CharField(max_length=7, blank=False)
     rating = models.PositiveIntegerField(default=0, editable=False)
     image = models.ImageField(upload_to='Lecture-Halls/img/', default='lecture-hall.png')
