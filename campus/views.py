@@ -275,7 +275,10 @@ class ScheduleLectureView(View):
 
                     messages.success(request, 'Lecture successfully scheduled!')
                     return redirect('schedule_lecture', staff_id, staff_name)
-        
+        else:
+            messages.error(request, 'Unknown error ocurred! Please try again later.')
+            return redirect('schedule_lecture', staff_id, staff_name)
+
         context = {'booked_units': booked_units_QS,}
         return render(request, self.template_name, context)
 
