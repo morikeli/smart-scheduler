@@ -1,0 +1,97 @@
+{% extends 'dashboard/students/base.html' %}{% block title %}Confirm attendance{% endblock %}
+{% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-sm-8 col-md-8">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Unconfirmed attended lectures</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>#</th>
+                                            <th>Image</th>
+                                            <th>Lecturer</th>
+                                            <th>Unit</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Venue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for lecture in scheduled_lectures %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><img src="{{ lecture.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="lecturer-dp"></td>
+                                            <td>{{ lecture.lecturer.staff.first_name|title }} {{ lecture.lecturer.staff.last_name|title }}</td>
+                                            <td>{{ lecture.unit_name }}</td>
+                                            <td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
+                                            <td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+                                            <td>
+                                                {% if lecture.is_attending is False %}
+                                                <div class="modal fade" id="confirm-attendance-{{ lecture.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"><i class="bi-check-circle-fill" style="color: #13bb46"></i> Confirm attendance</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body py-2">
+                                                                <form action="" method="post">
+                                                                    {% csrf_token %}
+                                                                    <div class="row">
+                                                                        <div class="col-xl-12 col-lg-12">
+                                                                            {{ AttendanceConfirmationForm|crispy }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="d-grid gap-2">
+                                                                        <button type="submit" class="btn btn-outline-secondary">Schedule lecture</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="{% url 'confirm_attendance' lecture.id request.user.student %}" >
+                                                    <span class="badge bg-danger"><i class="bi-exclamation-triangle-fill"></i> Click me</span>
+                                                </a>
+                                                {% elif lecture.lecture_hall is None %}
+                                                <span class="badge bg-primary">Allocation pending</span>
+                                                {% else %}
+                                                {{ lecture.lecture_hall|default:" -- " }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4">
+                    <div class="card info-card">
+                        <div class="card-body info-card">
+                            <h5 class="card-title">Attendance form</h5>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {% include 'messages.html' %}
+                                <div class="col-md-12">
+                                    <p class="small"><b>Unit name: </b> {{ lec_obj.unit_name }}</p><hr class="mt-0 mb-2">
+                                    {{ AttendanceConfirmationForm|crispy }}<hr>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-outline-primary">Confirm attendance</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}

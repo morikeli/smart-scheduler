@@ -1,0 +1,66 @@
+{% extends 'dashboard/faculty/base.html' %}{% block title %}Assign units{% endblock %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section profile">
+            <div class="row">
+                <div class="col-xl-7 col-lg-7">
+                    <div class="table-responsive">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Assigned lectures</h5>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>#</th>
+                                            <th>Image</th>
+                                            <th class="text-center">Lecturer</th>
+                                            <th class="text-center">Unit name</th>
+                                            <th>Year of Study</th>
+                                            <th>Semester</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for unit in booked_units %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><img src="{{ unit.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="dp"></td>
+                                            <td>{{ unit.lecturer.staff.first_name }} {{ unit.lecturer.staff.last_name }}</td>
+                                            <td>{{ unit.course_name }}</td>
+                                            <td class="text-end">{{ unit.year_of_study }}</td>
+                                            <td class="text-end">{{ unit.semester }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="class col-xl-5 col-lg-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-0">Assign units</h5>
+                            <p class="small fst-italic text-center mt-0 mb-1">
+                                Use this form to assign units to a given lecturer.
+                            </p>
+                            <form action="" method="post">
+                                {% include 'messages.html' %}
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{ LecturersUnitsBookingForm|crispy }}<hr>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}

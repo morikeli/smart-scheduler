@@ -1,0 +1,162 @@
+{% extends 'dashboard/students/base.html' %}{% block title %}Profile page{% endblock %}
+{% load crispy_forms_tags %}
+	{% block content %}
+	<main id="main" class="main">
+		<section class="section profile">
+			<div class="row">
+				<div class="col-xl-4">
+					<div class="card">
+						<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+							<img src="{{ request.user.profile_pic.url }}" alt="Profile" class="rounded-circle">
+							<h2>{{ request.user.username|title }}</h2>
+							{% if request.user.is_student is True %}
+							<h3>{{ request.user.gender|default:" -- " }} | {{ request.user.student.year|default:" -- " }}</h3>
+							{% else %}
+							<h3>{{ request.user.gender|default:" -- " }} | {{ request.user.faculty|default:" -- " }}</h3>
+							{% endif %}
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-xl-8">
+					<div class="card">
+						<div class="card-body pt-3">
+							<ul class="nav nav-tabs nav-tabs-bordered">
+								<li class="nav-item">
+									<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+								</li>
+								<li class="nav-item">
+									<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit profile</button>
+								</li>
+								<li class="nav-item">
+									<button class="nav-link" data-bs-toggle="tab" data-bs-target="#student-details-edit">Edit student details</button>
+								</li>
+								<li class="nav-item">
+									<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+								</li>
+							</ul>
+							<div class="tab-content pt-2">
+								{% include 'messages.html' %}
+								<div class="tab-pane fade show active profile-overview" id="profile-overview">
+									<h5 class="card-title">Profile Details</h5>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Full Name</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.first_name|title }} {{ request.user.last_name|title }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Gender</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.gender|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Mobile Number</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.mobile_no|default:" -- " }}</div>
+									</div>
+									{% if request.user.is_student is True %}
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Programme</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.student.programme|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">School</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.student.school|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Year of study</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.student.year|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Semester</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.student.semester|default:" -- " }}</div>
+									</div>
+									{% else %}
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">School</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.faculty.school|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Department</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.faculty.department|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Staff status</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.faculty.role|default:" -- " }}</div>
+									</div>
+									{% endif %}
+
+								</div>
+								
+								<div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+									<form action="" method="post" enctype="multipart/form-data">
+										{% csrf_token %}
+										<div class="row mb-3">
+											<label for="image" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+											<div class="col-md-8 col-lg-9">
+												<img src="{{ request.user.profile_pic.url }}" alt="Profile">
+											</div>
+										</div>
+										<div class="row mb-2">
+											<div class="col-xl-12 col-lg-12">
+												{{ EditProfileForm|crispy }}
+												<hr>
+											</div>
+										</div>
+										<div class="text-center d-grid gap-2">
+											<button type="submit" class="btn btn-outline-primary">Save Changes</button>
+										</div>
+									</form>
+								</div>
+
+								<div class="tab-pane fade profile-edit pt-3" id="student-details-edit">
+									<form action="" method="post" enctype="multipart/form-data">
+										{% csrf_token %}
+										<div class="row mb-2">
+											<div class="col-xl-12 col-lg-12">
+												{{ UpdateStudentInfoForm|crispy }}
+												<hr>
+											</div>
+										</div>
+										<div class="text-center d-grid gap-2">
+											<button type="submit" class="btn btn-outline-secondary">Save Changes</button>
+										</div>
+									</form>
+								</div>
+
+								<div class="tab-pane fade pt-3" id="profile-change-password">
+									<form action="" method="post">
+
+										<div class="row mb-3">
+											<label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+											<div class="col-md-8 col-lg-9">
+												<input name="password" type="password" class="form-control" id="currentPassword">
+											</div>
+										</div>
+
+										<div class="row mb-3">
+											<label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+											<div class="col-md-8 col-lg-9">
+												<input name="newpassword" type="password" class="form-control" id="newPassword">
+											</div>
+										</div>
+
+										<div class="row mb-3">
+											<label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+											<div class="col-md-8 col-lg-9">
+												<input name="renewpassword" type="password" class="form-control" id="renewPassword">
+											</div>
+										</div>
+
+										<div class="text-center">
+											<button type="submit" class="btn btn-primary">Change Password</button>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	{% endblock %}

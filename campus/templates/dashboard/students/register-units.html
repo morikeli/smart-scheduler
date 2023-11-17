@@ -1,0 +1,73 @@
+{% extends 'dashboard/students/base.html' %}{% block title %}Register units{% endblock %}
+{% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-xl-7 col-lg-7">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Registered units</h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover table-bordered tabled-striped">
+                                    <thead class="table-active">
+                                        <th>#</th>
+                                        <th>Unit name</th>
+                                        <th>Lecturer</th>
+                                        <th>Image</th>
+                                        <th>Registered</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for units in registered_units %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ units.unit }}</td>
+                                            <td>{{ units.unit.lecturer.staff.first_name|title }} {{ units.unit.lecturer.staff.last_name|title }}</td>
+                                            <td class="text-center"><img src="{{ units.unit.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="dp"></td>
+                                            <td class="text-center">
+                                                {% if units.is_registered is True %}
+                                                <span><i class="bi-check-circle-fill" style="color: #0e9437;"></i></span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="small text-center fst-italic text-muted">No data available</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-5 col-lg-5">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Registration form</h5>
+                            <form action="" method="post">
+                                {% include 'messages.html' %}
+                                {% csrf_token %}
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="unit-name" class="form-label">Unit name</label>
+                                        <select class="form-select" name="register-unit" aria-label="Units dropdown menu">
+                                            <option selected>-- Select one unit --</option>
+                                            {% for unit in booked_units %}
+                                            <option value="{{ unit.id }}">{{ unit.course_name }}</option>
+                                            {% endfor %}
+                                          </select>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-outline-secondary">Register unit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}

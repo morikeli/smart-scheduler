@@ -1,0 +1,103 @@
+{% extends 'dashboard/faculty/base.html' %}{% block title %}Schedule lecture{% endblock %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section profile">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12">
+                    {% for lecture in booked_units %}
+                    <div class="modal fade" id="schedule-modal-{{ lecture.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"><i class="bi-alarm-fill" style="color: #13bb46"></i> Schedule lecture</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-xl-12 col-lg-12">
+                                                <div class="mb-3">
+                                                    <input type="hidden" name="unit-name" value="{{ lecture.id }}">
+                                                    <label for="exampleInputEmail1" class="form-label label">Lecture date</label>
+                                                    <input type="date" class="form-control" name="lecture-date" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="lecture-start-time" class="form-label">Schedule start time</label>
+                                                    <input type="time" class="form-control" name="start-time" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">Schedule end time</label>
+                                                    <input type="time" class="form-control" name="end-time" required>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="recurrence-pattern" value="once" checked>
+                                                    <label class="form-check-label" for="once">
+                                                        Once
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="recurrence-pattern" value="daily">
+                                                    <label class="form-check-label" for="daily">
+                                                        Daily
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="recurrence-pattern" value="weekly">
+                                                    <label class="form-check-label" for="weekly">
+                                                        Weekly
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-outline-secondary">Schedule lecture</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="table-responsive">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">My units</h5>
+                                {% include 'messages.html' %}
+                                <table class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>#</th>
+                                            <th>Image</th>
+                                            <th class="text-center">Lecturer</th>
+                                            <th class="text-center">Unit name</th>
+                                            <th>Year of Study</th>
+                                            <th>Semester</th>
+                                            <th>Schedule</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for unit in booked_units %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><img src="{{ unit.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="dp"></td>
+                                            <td>{{ unit.lecturer.staff.first_name|title }} {{ unit.lecturer.staff.last_name|title }}</td>
+                                            <td>{{ unit.course_name }}</td>
+                                            <td class="text-end">{{ unit.year_of_study }}</td>
+                                            <td class="text-end">{{ unit.semester }}</td>
+                                            <td class="text-center"><a href="" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#schedule-modal-{{unit.id}}"><i class="bi-alarm-fill"></i> Schedule</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}

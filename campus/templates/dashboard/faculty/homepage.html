@@ -1,0 +1,100 @@
+{% extends 'dashboard/faculty/base.html' %}{% block title %}Dashboard{% endblock %}
+	{% load static %}
+	{% block content %}
+	<main id="main" class="main">
+		<section class="section dashboard">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="row">
+						<div class="col-md-12 col-lg-12">
+							<div class="card info-card units-card">
+								<div class="card-body">
+									<h5 class="card-title">Assigned units <span>| This Semester</span></h5>
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi-layers-fill"></i>
+										</div>
+										<div class="ps-3">
+											<h6>{{ TotalBookedUnits|default:"0" }}</h6>	
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="card recent-sales overflow-auto">
+								<div class="card-body">
+									<h5 class="card-title">My scheduled lectures <span>| Today</span></h5>
+									<table class="table table-bordered table-striped">
+										<thead>
+											<tr class="table-active">
+												<th>#</th>
+												<th class="text-center">Lecturer</th>
+												<th class="text-center">Unit</th>
+												<th class="text-center">Date</th>
+												<th class="text-center">Time</th>
+												<th class="text-center">Venue</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for lecture in scheduled_lectures %}
+											<tr>
+												<td>{{ forloop.counter }}</td>
+												<td>{{ lecture.lecturer.staff.first_name|title }}</td>
+												<td>{{ lecture.unit_name }}</td>
+												<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
+												<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+												<td class="text-end">
+													{% if not lecture.lecture_hall is None %}
+													{{ lecture.lecture_hall|default:"--" }}
+													{% else %}
+													<span class="badge bg-primary py-2">
+														<span class="spinner-border spinner-border-sm"></span> Pending
+													</span>
+													{% endif %}
+												</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				<div class="col-lg-4">
+					<div class="card">			
+						<div class="card-body">
+							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
+							<div class="activity">
+								{% for lecture in scheduled_lectures %}
+								<div class="activity-item d-flex">
+									<div class="activity-label">{{ lecture.date_scheduled|timesince|slice:"4" }} ago</div>
+									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
+									<div class="activity-content">
+										<p class="small fst-italic">
+											You scheduled <b>{{ lecture.unit_name }}</b> is scheduled for date <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> to start at <b>{{ lecture.start_time }}</b>
+										</p>
+									</div>
+								</div>
+								{% empty %}
+								<div class="activity-item">
+									<h6 class="small fst-italic text-center">
+										There is no scheduled lecture available!
+									</h6>
+								</div>
+								{% endfor %}
+								<hr class="dropdown-divider">
+								<div class="text-center">
+									<a href="{% url 'lectures_records' request.user.faculty request.user.faculty.id %}" class="badge bg-primary p-2">View all lectures</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	{% endblock %}

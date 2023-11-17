@@ -1,0 +1,183 @@
+{% extends 'dashboard/students/base.html' %}{% block title %}Dashboard{% endblock %}
+{% load crispy_forms_tags %}
+	{% block content %}
+	<main id="main" class="main">
+		<section class="section dashboard">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="row">
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card units-card">
+								<div class="card-body">
+									<h5 class="card-title">Units <span>| This Semester</span></h5>
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi-mortarboard-fill"></i>
+										</div>
+										<div class="ps-3">
+											<h6>{{ TotalUnits|default:"0" }}</h6>	
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card lectures-card">				
+								<div class="card-body">
+									<h5 class="card-title">Lectures <span>| Today</span></h5>
+									<div class="d-flex align-items-center">
+										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi-laptop-fill"></i>
+										</div>
+										<div class="ps-3">
+											<h6>{{ TotalLectures|default:0 }}</h6>
+										</div>
+									</div>
+								</div>
+				
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="card recent-sales overflow-auto">
+								<div class="card-body">
+									<h5 class="card-title">Scheduled lectures</h5>
+									<div class="table-responsive">
+										<table class="table table-bordered table-striped">
+											<thead>
+												<tr class="table-active">
+													<th>#</th>
+													<th>Image</th>
+													<th>Lecturer</th>
+													<th>Unit</th>
+													<th>Date</th>
+													<th>Time</th>
+													<th>Venue</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for lecture in scheduled_lectures %}
+												<tr>
+													<td>{{ forloop.counter }}</td>
+													<td><img src="{{ lecture.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="lecturer-dp"></td>
+													<td>{{ lecture.lecturer.staff.first_name|title }} {{ lecture.lecturer.staff.last_name|title }}</td>
+													<td>{{ lecture.unit_name }}</td>
+													<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
+													<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+													<td>
+														{% if lecture.is_attending is False %}
+														<a href="{% url 'confirm_attendance' lecture.id request.user.student %}">
+															<span class="badge bg-danger"><i class="bi-exclamation-triangle-fill"></i> Click me</span>
+														</a>
+														{% elif lecture.lecture_hall is None %}
+														<span class="badge bg-primary">Allocation pending</span>
+														{% else %}
+														{{ lecture.lecture_hall|default:" -- " }}
+														{% endif %}
+													</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				<div class="col-lg-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Calendar</h5>
+							<div id="calendar"></div>
+							<input type="hidden" id="events" value="{{ events_json|safe }}" name="events-list">
+						</div>
+					</div>
+
+					<div class="card">			
+						<div class="card-body">
+							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
+							<div class="activity">
+								{% for lecture in scheduled_lectures %}
+								<div class="activity-item d-flex">
+									<div class="activity-label">{{ lecture.date_scheduled|timesince|slice:":5" }} ago</div>
+									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
+									<div class="activity-content">
+										<p class="small fst-italic">
+											{{ lecture.unit_name }} is scheduled to start on <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> at <b>{{ lecture.start_time|date:"H:i A" }}</b>
+										</p>
+									</div>
+								</div>
+								{% empty %}
+								<div class="activity-item">
+									<h6 class="small fst-italic text-center">
+										There is no scheduled lecture available!
+									</h6>
+								</div>
+								{% endfor %}
+								<hr class="dropdown-divider">
+								<div class="text-center">
+									<a href="{% url 'student_lecture_records' request.user.student %}" class="badge bg-primary p-2">View more</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		{% comment %}
+		<script>
+			fetch('/homepage/')  // URL to fetch events from your Django view
+				.then(response => response.json())
+				.then(data => {
+					// Data is an array of events obtained from the backend
+					// Iterate through the events and add them to the calendar
+					data.forEach(function(event) {
+						calendar.addEvent({
+							//title: event.title,
+							start: event.start,
+							end: event.end
+						});
+					});
+				})
+				.catch(error => console.error('Error fetching events:', error));
+			
+			document.addEventListener('DOMContentLoaded', function() {
+				var calendarEl = document.getElementById('calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					// Other FullCalendar options and callbacks can be added here
+				});
+				calendar.render();
+			});
+
+		</script>
+		{% endcomment %}
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var calendarEl = document.getElementById('calendar');
+				var events_data = document.getElementById('events')
+				var events = [];
+				for (var i = 0; i < events_data.value; i++) {
+					events.push({
+						title: events_data[i].title,
+						start: events_data[i].start_date,
+						end: events_data[i].end_date
+					});
+				}
+				console.log(events_data.value)
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth', // or 'timeGridWeek', 'timeGridDay', etc.
+					events: events_data
+					// calendar.setOption('events', events_data);
+					
+				});
+				calendar.render();
+				console.log(events_data)
+
+			});
+		</script>
+	</main>
+	{% endblock %}

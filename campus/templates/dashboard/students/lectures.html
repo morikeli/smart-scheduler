@@ -1,0 +1,57 @@
+{% extends 'dashboard/students/base.html' %}{% block title %}{{ request.user.username }}'s lecture records{% endblock %}
+{% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section profile">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="table-responsive">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Lecture records</h5>
+                                <p class="small fst-italic mt-0"><b>NOTE: </b>Current/latest lectures are displayed first.</p>
+                                {% include 'messages.html' %}
+                                <table class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>#</th>
+                                            <th>Image</th>
+                                            <th class="text-center">Lecturer</th>
+                                            <th class="text-center">Unit name</th>
+                                            <th>Scheduled date</th>
+                                            <th>Time</th>
+                                            <th>Pattern</th>
+                                            <th>Venue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for lecture in scheduled_lectures %}
+											<tr>
+												<td>{{ forloop.counter }}</td>
+                                                <td><img src="{{ lecture.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt=""></td>
+												<td>{{ lecture.lecturer.staff.first_name|title }} {{ lecture.lecturer.staff.last_name|title }}</td>
+												<td>{{ lecture.unit_name }}</td>
+												<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
+												<td>{{ lecture.start_time|date:"H:i A" }} - {{ lecture.end_time|date:"H:i A" }}</td>
+                                                <td>{{ lecture.recurrence_pattern }}</td>
+												<td class="text-center">
+													{% if not lecture.lecture_hall is None %}
+													{{ lecture.lecture_hall|default:"--" }}
+													{% else %}
+													<span class="badge bg-primary py-2">
+														<span class="spinner-border spinner-border-sm"></span> Room allocation pending
+													</span>
+													{% endif %}
+												</td>
+											</tr>
+											{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}

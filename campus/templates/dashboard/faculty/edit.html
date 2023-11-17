@@ -1,0 +1,29 @@
+{% extends 'dashboard/faculty/base.html' %}{% block title %}Edit scheduled lecture{% endblock %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section profile">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 offset-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="" method="post">
+                                <h5 class="card-title">Edit scheduled lecture</h5>
+                                {% include 'messages.html' %}
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-xl-12 col-lg-12">
+                                        {{ EditScheduledLectureForm|crispy }}<hr>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-outline-secondary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}
