@@ -18,7 +18,7 @@ def schedule_recurring_lectures():
         if (current_day == _lecture.lecture_date.strftime('%A %b. %d, %Y')):
             # Code to notify participants (i.e. students)
             notification = Notification.objects.get_or_create(
-                message=f'Lecture for unit "{_lecture.unit_name}" scheduled for today at {_lecture.start_time.strftime("%H:%M")}.',
+                message=f'Lecture for unit {_lecture.unit_name} scheduled for today at {_lecture.start_time.strftime("%H:%M")}.',
                 scheduled_lecture_id=_lecture.id,
             )
 
