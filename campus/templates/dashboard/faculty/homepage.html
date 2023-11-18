@@ -69,7 +69,7 @@
 						<div class="card-body">
 							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
 							<div class="activity">
-								{% for lecture in scheduled_lectures %}
+								{% for lecture in scheduled_lectures reversed %}
 								<div class="activity-item d-flex">
 									<div class="activity-label">{{ lecture.date_scheduled|timesince|slice:"4" }} ago</div>
 									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
