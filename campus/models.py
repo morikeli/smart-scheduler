@@ -73,7 +73,7 @@ class LectureHall(models.Model):
     """ This db table stores records of all available lecture halls in the entire institution. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     academic_block = models.CharField(max_length=20, blank=False)
-    hall_no = models.CharField(max_length=5, blank=False)
+    hall_no = models.CharField(max_length=5, unique=True, blank=False)
     seating_capacity = models.PositiveIntegerField(default=0)
     floor = models.CharField(max_length=7, blank=False)
     rating = models.PositiveIntegerField(default=0, editable=False)
