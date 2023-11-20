@@ -16,6 +16,7 @@ class StudentHomepageView(View):
     template_name = 'dashboard/students/homepage.html'
 
     def get(self, request, *args, **kwargs):
+        current_date = dt.now().strftime("%Y-%m-%d")
         total_units = RegisteredUnit.objects.filter(student=request.user.student).count()
         total_lectures = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
@@ -25,6 +26,7 @@ class StudentHomepageView(View):
         scheduled_lectures_QS = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
             unit_name__students_course=request.user.student.course,
+            lecture_date=current_date,
         ).order_by('-lecture_date', '-start_time', 'unit_name')
 
         events = Lecture.objects.filter(
