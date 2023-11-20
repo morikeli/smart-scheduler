@@ -19,6 +19,11 @@ def generate_feedbackID(sender, instance, **kwargs):
 def generate_lectureID(sender, instance, **kwargs):
     if instance.id == '':
         instance.id = str(uuid.uuid4()).replace('-', '')[:30]
+    
+    # Schedule the class the instance is saved.
+    if instance.recurrence_pattern == 'once': pass
+    else:
+        schedule_recurring_lectures()   # check if instance is a recurring lecture. If True, call schedule_recurring_lectures()
 
 @dispatch.receiver(pre_save, sender=LectureHall)
 def generate_lecture_hallID(sender, instance, **kwargs):
