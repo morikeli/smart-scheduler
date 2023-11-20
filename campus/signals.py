@@ -2,7 +2,6 @@ from .models import BookedUnit, Feedback, Lecture, LectureHall, Notification, Re
 from django.db.models.signals import pre_save, post_save
 from .utils import schedule_recurring_lectures
 from django import dispatch
-import schedule
 import uuid
 
 
