@@ -1,3 +1,47 @@
-# class-compass
+# Smart-scheduler
 
-###### README Coming soon ...
+![Screenshot from 2023-11-20 20-55-54](https://github.com/morikeli/smart-scheduler/assets/78599959/bc57ceb5-b2e8-41ae-b5bb-867273329033)
+
+
+### Overview
+#### This is a web app that is meant to serve our local learning institution - the website serves students and the administration. The website enables lecturers to schedule lectures while students receive updates and notification about the scheduled lectures. To avoid time wastage and disruption when looking for an appropriate venue, the web app automatically allocates venues to each lecture scheduled for the current date.
+
+### Technologies used
+  - HTML
+  - CSS
+  - JS
+  - jQuery (Calendar integration)
+  - Django (backend)
+
+### User instructions
+#### The website is live, i.e. its already deployed on render [Visit website](https://smart-schedule.onrender.com/auth/login) To use the website you must create an account either as a student, Head of Department (HOD) or a lecturer.
+#### Students 
+  - register units they will be studying in the current semester
+  - update their students info, e.g. year of study, semester
+  - confirm they will be attending a scheduled lecture
+  - provide feedback about the venue of the latest lecture
+#### Lecturers 
+  - schedule lectures they will be teaching on a given date and time
+
+#### The Head of department (HOD)
+  - appoints/assigns units a lecturer will be teaching in the current semester
+  - schedules a lecture he/she will be teaching in the current semester
+
+### Developer instructions
+##### To run the project offline;
+  - clone the repo to your desired location, e.g. Desktop, Downloads or Documents
+  - Install Python interpreter on your local machine if you don't have one. In this project, Python v3.11.4 was used.
+  - Open the project folder using your IDE of choice
+  - Create a virtual environment using the command `python -m venv .venv` or `python3 -m venv .venv`. You use this command in your IDE's terminal or your terminal/Command prompt. Make sure you have opened the project folder in your terminal.
+  - On your terminal/cmd, type:
+    -  `source .venv/bin/activate` (Linux)
+    -  `.venv\Scripts\activate`  (Windows)
+  - To install modules and libraries used in developing the project, type `pip install -r requirements.txt` or `pip3 install -r requirements.txt`
+  - Once all the packages have been installed, type `python manage.py runserver` or `python3 manage.py runserver`. You can view the website on your browser using the link `http://127.0.0.1:8000`.
+
+### Issues
+#### Feel free to report any issues encountered or provide your feedback
+
+### Buy me coffee
+I need coffee to survive. It's like my liquid superhero serum. Be a hero today by appreciating the effort put in developing the project by [buying me coffee today!](https://www.buymeacoffee.com/keli.io)
+
