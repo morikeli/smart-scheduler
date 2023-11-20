@@ -83,7 +83,7 @@
                                         {% for unit in booked_units %}
                                         <tr>
                                             <td>{{ forloop.counter }}</td>
-                                            <td><img src="{{ unit.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="dp"></td>
+                                            <td><img src="{{ unit.lecturer.staff.profile_pic.url }}" class="rounded-circle" height="50px" width="50px" alt="dp"></td>
                                             <td>{{ unit.lecturer.staff.first_name|title }} {{ unit.lecturer.staff.last_name|title }}</td>
                                             <td>{{ unit.course_name }}</td>
                                             <td class="text-end">{{ unit.year_of_study }}</td>
