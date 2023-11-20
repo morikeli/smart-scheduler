@@ -11,7 +11,7 @@ def user_notifications(request):
     total_lec_notifications = 0
     total_stud_notifications = 0
     
-    if request.user.is_anonymous is False:  # check if user is anonymous
+    if request.user.is_anonymous is False and request.user.is_superuser is False:  # check if user is anonymous
         try:
             lecturer_notifications = Notification.objects.filter(scheduled_lecture__lecturer=request.user.faculty) if str(request.user) == str(request.user.faculty) else []    # if logged in user is lec/HOD return notifications else return empty list
             total_lec_notifications = lecturer_notifications.count() if len(lecturer_notifications) > 0 else total_stud_notifications
