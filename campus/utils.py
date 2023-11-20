@@ -2,11 +2,8 @@ from .models import Lecture, LectureHall, Notification, RegisteredUnit
 from datetime import datetime as dt, timedelta, time
 from django.http import HttpResponse
 from django.db.models import Q
-from time import sleep
-import schedule
 
 
-@schedule.repeat(schedule.every(1).minute.at(':15').until(time(17, 00)))
 def schedule_recurring_lectures():
     """ This is a function that automatically schedules recurring lectures, i.e daily or weekly lectures. """
 
