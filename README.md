@@ -4,7 +4,7 @@
 
 
 ### Overview
-#### This is a web app that is meant to serve our local learning institution - the website serves students and the administration. The website enables lecturers to schedule lectures while students receive updates and notification about the scheduled lectures. To avoid time wastage and disruption when looking for an appropriate venue, the web app automatically allocates venues to each lecture scheduled for the current date.
+  This is a web app that is meant to serve our local learning institution - the website serves students and the administration. The website enables lecturers to schedule lectures while students receive updates and notification about the scheduled lectures. To avoid time wastage and disruption when looking for an appropriate venue, the web app automatically allocates venues to each lecture scheduled for the current date.
 
 ### Technologies used
   - HTML
@@ -14,7 +14,7 @@
   - Django (backend)
 
 ### User instructions
-#### The website is live, i.e. its already deployed on render [Visit website](https://smart-schedule.onrender.com/auth/login) To use the website you must create an account either as a student, Head of Department (HOD) or a lecturer.
+  The website is live, i.e. its already deployed on Render [visit website](https://smart-schedule.onrender.com/auth/login). To use the website you must create an account either as a student, Head of Department (HOD) or a lecturer.
 #### Students 
   - register units they will be studying in the current semester
   - update their students info, e.g. year of study, semester
@@ -40,8 +40,10 @@
   - Once all the packages have been installed, type `python manage.py runserver` or `python3 manage.py runserver`. You can view the website on your browser using the link `http://127.0.0.1:8000`.
 
 ### Issues
-#### Feel free to report any issues encountered or provide your feedback
+ Feel free to report any issues encountered (create an issue using the `Issues` tab or provide your feedback through the `Discussions` tab. Your feedback is highly appreciated.
 
 ### Buy me coffee
-I need coffee to survive. It's like my liquid superhero serum. Be a hero today by appreciating the effort put in developing the project by [buying me coffee today!](https://www.buymeacoffee.com/keli.io)
+##### Fun fact!
+  I need coffee to survive. It's like my liquid superhero serum. Be a hero today!
+  Appreciate the effort put in developing the project by [buying me coffee today!](https://www.buymeacoffee.com/keli.io) 😁
 
