@@ -168,7 +168,7 @@ class SubmitFeedbackView(View):
         lecture_hall = LectureHall.objects.get(id=hall_id)
         form = self.form_class()
 
-        context = {'FeedbackForm': form}
+        context = {'FeedbackForm': form, 'lecture_hall_obj': lecture_hall}
         return render(request, self.template_name, context)
     
     def post(self, request, hall_id, *args, **kwargs):
