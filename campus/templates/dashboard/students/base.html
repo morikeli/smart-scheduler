@@ -29,7 +29,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link nav-icon" href="" data-bs-toggle="dropdown">
                         <i class="bi bi-bell-fill"></i>
-                        {% if student_notifications < 1 %}
+                        {% if student_notifications != 0 %}
                         <span class="badge bg-danger badge-number">{{ TotalStudentNotifications }}</span>
                         {% endif %}
                     </a>
