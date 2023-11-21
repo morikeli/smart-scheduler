@@ -25,7 +25,7 @@
                                         {% for lecture in scheduled_lectures %}
                                         <tr>
                                             <td>{{ forloop.counter }}</td>
-                                            <td><img src="{{ lecture.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="lecturer-dp"></td>
+                                            <td><img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle" height="45px" width="45px" alt="lecturer-dp"></td>
                                             <td>{{ lecture.lecturer.staff.first_name|title }} {{ lecture.lecturer.staff.last_name|title }}</td>
                                             <td>{{ lecture.unit_name }}</td>
                                             <td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
