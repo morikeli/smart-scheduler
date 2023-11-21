@@ -84,6 +84,12 @@ def generate_lectureID(sender, instance, **kwargs):
                 else:
                     pass
 
+    # mark a given lecture as already taught, i.e. lecture has been taught
+    elif instance.is_taught is False:   # check if is_taught is False in the current instance
+        current_date = dt.now()
+        if (current_date.hour >= instance.end_time.hour) and (instance.lecture_date.strftime('%Y-%m-%d') <= current_date.strftime('%Y-%m-%d')):
+            instance.is_taught = True   # set "is_taught" to True
+
 @dispatch.receiver(pre_save, sender=LectureHall)
 def generate_lecture_hallID(sender, instance, **kwargs):
     if instance.id == '':
