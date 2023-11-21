@@ -161,7 +161,7 @@ class StudentsLecturesDetailView(View):
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
 class SubmitFeedbackView(View):
     form_class = FeedbackForm
-    template_name = 'students/feedback.html'
+    template_name = 'dashboard/students/feedback.html'
 
     def get(self, request, hall_id, *args, **kwargs):
         lecture_hall = LectureHall.objects.get(id=hall_id)
@@ -176,12 +176,12 @@ class SubmitFeedbackView(View):
 
         if form.is_valid():
             new_feedback = form.save(commit=False)
-            new_feedback.student = request.user
+            new_feedback.student = request.user.student
             new_feedback.lecture_hall = lecture_hall
             new_feedback.save()
 
             messages.info(request, 'Thank you for your feedback!')
-            return redirect('give_feedback', hall_id)
+            return redirect('student_feedback', hall_id)
 
         context = {'FeedbackForm': form}
         return render(request, self.template_name, context)
