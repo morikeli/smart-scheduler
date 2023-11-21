@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import user_passes_test
 from campus.models import Lecture, Notification
 from accounts.models import User
 
