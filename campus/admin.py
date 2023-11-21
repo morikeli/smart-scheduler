@@ -23,5 +23,5 @@ class LectureHallsRecords(admin.ModelAdmin):
 
 @admin.register(Feedback)
 class StudentsFeedbackTable(admin.ModelAdmin):
-    list_display = ['student', 'lecture_hall', 'rate_score']
-    readonly_fields = ['student', 'lecture_hall', 'complaint', 'description', 'rate_score']
+    list_display = ['lecture_hall', 'rate_score', 'date_posted']
+    readonly_fields = ['lecture_hall', 'complaint', 'description', 'rate_score']
