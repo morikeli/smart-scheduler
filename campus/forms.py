@@ -109,6 +109,7 @@ class FeedbackForm(forms.ModelForm):
         (None, '-- Select type of complaint --'),
         ('Burnt bulbs', 'Burnt bulbs/flourescent tubes'),
         ('Dirty whiteboard', 'Dirty whiteboard (Permanent marker used)'),
+        ('Dysfunctional ethernet port', 'Dysfunctional ethernet ports'),
         ('Dysfunctional sockets', 'Dysfunctional sockets'),
         ('Environmental noise', 'Environmental noise'),
         ('Naked electrical wires', 'Naked electrical wires'),
