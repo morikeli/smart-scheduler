@@ -1,10 +1,11 @@
 from campus.models import Lecture, Notification
 from accounts.models import User
+from datetime import datetime as dt
 
 
 def user_notifications(request):
     """ This function is used to display user notifications in all templates. """
-    
+    current_date = dt.now().strftime('%Y-%m-%d')
     student_notifications = []
     lecturer_notifications = []
     total_lec_notifications = 0
