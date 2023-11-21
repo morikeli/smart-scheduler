@@ -1,5 +1,5 @@
 from .models import Lecture, Notification
-from datetime import datetime as dt, timedelta, time
+from datetime import datetime as dt, timedelta
 from django.http import HttpResponse
 from django.db.models import Q
 
