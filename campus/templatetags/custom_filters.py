@@ -22,16 +22,16 @@ def custom_timesince_filter(value):
     (time_diff := time_diff.split(',')[0])  # split time and access the first value.
 
     if 'minute' in time_diff:
-        return f"{time_diff[:2]} m"     # get the first 2 items in the str. value
+        return f"{time_diff[:2]}m"     # get the first 2 items in the str. value
     
     elif 'hour' in time_diff:
-        return f"{time_diff[:2]} h"
+        return f"{time_diff[:2]}h"
     
     elif 'day' in time_diff:
-        return f"{time_diff[:2]} d"
+        return f"{time_diff[:2]}d"
     
     elif 'week' in time_diff:
-        return f"{time_diff[:2]} w"
+        return f"{time_diff[:2]}w"
     
     else:
         return 'Just now'
