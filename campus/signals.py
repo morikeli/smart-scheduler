@@ -49,10 +49,22 @@ def generate_lectureID(sender, instance, **kwargs):
                 lecture_halls = [hall.hall_no for hall in LectureHall.objects.all()]
                 sampled_lr = sample(lecture_halls, 1)[0]    # sample lecture halls and pick the first lecture hall from the list
                 
-                if registered_students <= 0:
-                    pass
+                if registered_students <= 20:
+                    disc_rooms = [room.hall_no for room in LectureHall.objects.filter(hall_no__icontains='dr')]
+                    sample_room = sample(disc_rooms, 1)[0]
 
-                elif registered_students <= 10:
+                    check_lr_exists = Lecture.objects.filter(lecture_hall=disc_rooms, lecture_date=current_day).exists()    # check if discussion room has been taken
+                    if check_lr_exists is True:
+                        _disc_rooms = [room.hall_no for room in LectureHall.objects.all().exclude(sample_room)]     # exclude the assigned/occupied disc_room
+                        resample_rooms = sample(_disc_rooms, 1)[0]  # sample QS and get a new discussion room.
+                        selected_disc_room = LectureHall.objects.get(hall_no=resample_rooms)     # get ID of the resampled discussion room
+                        instance.lecture_hall = selected_disc_room
+                    
+                    else:
+                        _room = LectureHall.objects.get(hall_no=sample_room)
+                        instance.lecture_hall = _room
+                
+                elif registered_students <= 60:
                     _hall_id_ = LectureHall.objects.get(hall_no__icontains=sampled_lr)
                     get_scheduled_lec = Lecture.objects.filter(lecture_hall=_hall_id_, lecture_date=current_day).exists()   # check if sampled lecture hall has been assigned to an existing scheduled lecture.
 
