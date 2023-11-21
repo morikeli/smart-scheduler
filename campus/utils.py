@@ -21,13 +21,11 @@ def schedule_recurring_lectures():
 
             # Code to adjust date and time for the next lectures
             if _lecture.recurrence_pattern == 'daily':
-                schedule.repeat(schedule.every().minute.at(':15').until(time(17, 00)).do(schedule_recurring_lectures))
-                # print(f'Time difference: {_lecture.start_time - timedelta(hours=3)}')
                 # in daily lectures, we have to add 1 day to the current lecture date. For example,
                 # if lecture_date is 2023-11-15 where 15 is the day, add 1 to 15 -> 15 + 1 = 16. Therefore,
                 # the next scheduled class will be on date 2023-11-16
                 # the timestamp, i.e. start_time & end_time, remains the same.
-                Lecture.objects.update_or_create(
+                new_lec = Lecture.objects.update_or_create(
                     lecturer=_lecture.lecturer,
                     student=_lecture.student,
                     unit_name=_lecture.unit_name,
@@ -42,7 +40,7 @@ def schedule_recurring_lectures():
                 # if lecture_date is 2023-11-15 where 15 is the day, add 7 to 15 -> 15 + 7 = 22. Therefore,
                 # the next scheduled class will be on date 2023-11-22
                 # the timestamp, i.e. start_time & end_time, remains the same.
-                Lecture.objects.update_or_create(
+                new_lec = Lecture.objects.update_or_create(
                     lecturer=_lecture.lecturer,
                     student=_lecture.student,
                     unit_name=_lecture.unit_name,
@@ -51,9 +49,36 @@ def schedule_recurring_lectures():
                     end_time=_lecture.end_time,
                     recurrence_pattern=_lecture.recurrence_pattern,
                 )
-            
-            
-            
-            if len(recurring_classes) != 0:
-                schedule.run_pending()
-                sleep(1)   # 
+            else:
+                # calculate current_time and end_time of the lecture,
+                # if hours is greater than 3 mark the lecture as taught, i.e. set is_taught to True.
+                if (_lecture.is_taught is False) and (_lecture.end_time > _lecture.start_time):
+                    time_difference_hours = _lecture.end_time.hour - _lecture.start_time.hour
+                    time_difference_minutes = _lecture.end_time.minute - _lecture.end_time.minute
+                    if time_difference_minutes < 0:
+                        time_difference_minutes += 60
+                        time_difference_hours -= 1
+                    
+                    if ((elapsed_hours := time_difference_hours) >= 3):   # if the current lecture is past due time, update "is_taught" in the current lecture record to True.
+                        get_lec_record = Lecture.objects.get(id=_lecture.id)    # get current lecture ID.
+                        update_lecture = Lecture.objects.update(
+                            id=get_lec_record,
+                            lecturer=_lecture.lecturer,
+                            student=_lecture.student,
+                            unit_name=_lecture.unit_name,
+                            lecture_date=_lecture.lecture_date,
+                            start_time=_lecture.start_time,
+                            end_time=_lecture.end_time,
+                            recurrence_pattern=_lecture.recurrence_pattern,
+                            is_taught=True,
+                        )
+
+def user_logs(request):
+    user_ip = request.META.get('REMOTE_ADDR')
+    visited_url = request.build_absolute_uri()
+    timestamp = dt.now().strftime("%a %d-%m-%Y %H:%M:%S")
+    log_entry = f"Visited URL: {visited_url} --> IP Address: {user_ip} - Timestamp: {timestamp}\n"
+
+    with open("log.txt", "a") as log_file:
+        log_file.write(log_entry)
+    return HttpResponse("Hello, thanks for visiting the website!")
