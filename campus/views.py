@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models import Avg
 from django.views import View
-from .models import BookedUnit, Lecture, LectureHall, RegisteredUnit
+from .models import BookedUnit, Feedback, Lecture, LectureHall, RegisteredUnit
 from datetime import time, datetime as dt
 
 
@@ -179,6 +180,11 @@ class SubmitFeedbackView(View):
             new_feedback.student = request.user.student
             new_feedback.lecture_hall = lecture_hall
             new_feedback.save()
+
+            # calculate the average rating of the lecture hall/room based on all rate scores in submitted user feedback
+            avg_rating = Feedback.objects.aggregate(avg_rating=Avg('rate_score'))['avg_rating']
+            lecture_hall.rating = avg_rating
+            lecture_hall.save()
 
             messages.info(request, 'Thank you for your feedback!')
             return redirect('student_feedback', hall_id)
