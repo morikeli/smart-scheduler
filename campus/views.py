@@ -20,14 +20,14 @@ class StudentHomepageView(View):
         total_units = RegisteredUnit.objects.filter(student=request.user.student).count()
         total_lectures = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
-            lecture_date=dt.now().strftime('%Y-%m-%d'),
+            lecture_date=current_date,
         ).count()
         
         scheduled_lectures_QS = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
             unit_name__students_course=request.user.student.course,
             lecture_date=current_date,
-        ).order_by('-lecture_date', '-start_time', 'unit_name')
+        ).order_by('-lecture_date', 'start_time', 'unit_name')
 
         events = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
@@ -99,13 +99,15 @@ class LectureAttendanceConfirmationView(View):
     template_name = 'dashboard/students/confirm-attendance.html'
 
     def get(self, request, lecture_id, _student, *args, **kwargs):
+        current_date = dt.now().strftime('%Y-%m-%d')
         lec_obj = Lecture.objects.get(id=lecture_id)
         form = self.form_class(instance=lec_obj)
         scheduled_lectures_QS = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
             unit_name__students_course=request.user.student.course,
+            lecture_date=current_date,
             student=None,
-        ).order_by('-lecture_date', '-start_time', 'unit_name')
+        ).order_by('-lecture_date', 'start_time', 'unit_name')
 
 
         context = {
