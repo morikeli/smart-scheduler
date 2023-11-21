@@ -70,7 +70,7 @@
 						<div class="card-body">
 							<h5 class="card-title">Scheduled lectures <span>| Today</span></h5>
 							<div class="activity">
-								{% for lecture in scheduled_lectures reversed %}
+								{% for lecture in scheduled_lectures %}
 								<div class="activity-item d-flex">
 									{% with lecture.date_scheduled|custom_timesince as time_since %}
 									<div class="activity-label">
