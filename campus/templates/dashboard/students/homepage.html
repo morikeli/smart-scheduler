@@ -65,7 +65,7 @@
 													<td>{{ lecture.lecturer.staff.first_name|title }} {{ lecture.lecturer.staff.last_name|title }}</td>
 													<td>{{ lecture.unit_name }}</td>
 													<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
-													<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+													<td>{{ lecture.start_time|date:"H:i" }} - {{ lecture.end_time|date:"H:i" }} HRS</td>
 													<td>
 														{% if lecture.is_attending is False %}
 														<a href="{% url 'confirm_attendance' lecture.id request.user.student %}">
@@ -74,7 +74,11 @@
 														{% elif lecture.lecture_hall is None %}
 														<span class="badge bg-primary">Allocation pending</span>
 														{% else %}
-														{{ lecture.lecture_hall|default:" -- " }}
+															{% if lecture.is_taught is False %}
+																<span class="badge bg-success">{{ lecture.lecture_hall|default:" -- " }}</span>
+															{% else %}
+																<a href="{% url 'student_feedback' lecture.lecture_hall.id %}">{{ lecture.lecture_hall|default:" -- " }}</a>
+															{% endif %}
 														{% endif %}
 													</td>
 												</tr>
@@ -111,7 +115,7 @@
 									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
 									<div class="activity-content">
 										<p class="small fst-italic">
-											{{ lecture.unit_name }} is scheduled to start on <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> at <b>{{ lecture.start_time|date:"H:i A" }}</b>
+											{{ lecture.unit_name }} is scheduled to start on <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> at <b>{{ lecture.start_time|date:"h:iA" }}</b>
 										</p>
 									</div>
 								</div>
