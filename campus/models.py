@@ -100,7 +100,7 @@ class Feedback(models.Model):
     date_edited = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.lecture_hall
+        return f'{self.lecture_hall}'
     
     class Meta:
         ordering = ['lecture_hall', '-date_posted']
