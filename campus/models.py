@@ -93,7 +93,7 @@ class Feedback(models.Model):
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, editable=False)
     lecture_hall = models.ForeignKey(LectureHall, on_delete=models.CASCADE, editable=False)
-    complaint = models.CharField(max_length=20, blank=False)
+    complaint = models.CharField(max_length=30, blank=False)
     description = models.TextField()
     rate_score = models.PositiveIntegerField(default=0)
     date_posted = models.DateTimeField(auto_now_add=True)
