@@ -45,10 +45,10 @@
 												<td>{{ lecture.lecturer.staff.first_name|title }}</td>
 												<td>{{ lecture.unit_name }}</td>
 												<td>{{ lecture.lecture_date|date:"D d-M-Y" }}</td>
-												<td>{{ lecture.start_time|date:"H:i:a" }} - {{ lecture.end_time|date:"H:i:a" }}</td>
+												<td>{{ lecture.start_time|date:"H:i" }} - {{ lecture.end_time|date:"H:i" }}HRS</td>
 												<td class="text-end">
 													{% if not lecture.lecture_hall is None %}
-													{{ lecture.lecture_hall|default:"--" }}
+													<span class="badge bg-success">{{ lecture.lecture_hall|default:"--" }}</span>
 													{% else %}
 													<span class="badge bg-primary py-2">
 														<span class="spinner-border spinner-border-sm"></span> Pending
@@ -80,7 +80,7 @@
 									<img src="{{ lecture.lecturer.staff.profile_pic.url }}" class="rounded-circle activity-badge align-self-start" height="30px" width="30px" alt="user-dp">
 									<div class="activity-content">
 										<p class="small fst-italic">
-											You scheduled <b>{{ lecture.unit_name }}</b> is scheduled for date <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> to start at <b>{{ lecture.start_time }}</b>
+											You scheduled <b>{{ lecture.unit_name }}</b> is scheduled for date <b>{{ lecture.lecture_date|date:"D d-M-Y" }}</b> to start at <b>{{ lecture.start_time|date:"h:iA" }}</b>
 										</p>
 									</div>
 								</div>
