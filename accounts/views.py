@@ -8,8 +8,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LogoutView
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views import View
 from django.conf import settings
+from django.views import View
 import os
 
 
