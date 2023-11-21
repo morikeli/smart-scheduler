@@ -38,7 +38,7 @@ def generate_lectureID(sender, instance, **kwargs):
         # If lecture hall is found,
         #    - check if registered_students < LR_seating_capacity
         #    - if True, get number of registered_students
-        #         - if number <= 10 assign discussion rooms, new building
+        #         - if number <= 20 assign discussion rooms, new building
         #         - if number <= 60 assign lecture rooms
         #         - if number <= 100 assign MPH
 
