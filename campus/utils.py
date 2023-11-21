@@ -49,29 +49,6 @@ def schedule_recurring_lectures():
                     end_time=_lecture.end_time,
                     recurrence_pattern=_lecture.recurrence_pattern,
                 )
-            else:
-                # calculate current_time and end_time of the lecture,
-                # if hours is greater than 3 mark the lecture as taught, i.e. set is_taught to True.
-                if (_lecture.is_taught is False) and (_lecture.end_time > _lecture.start_time):
-                    time_difference_hours = _lecture.end_time.hour - _lecture.start_time.hour
-                    time_difference_minutes = _lecture.end_time.minute - _lecture.end_time.minute
-                    if time_difference_minutes < 0:
-                        time_difference_minutes += 60
-                        time_difference_hours -= 1
-                    
-                    if ((elapsed_hours := time_difference_hours) >= 3):   # if the current lecture is past due time, update "is_taught" in the current lecture record to True.
-                        get_lec_record = Lecture.objects.get(id=_lecture.id)    # get current lecture ID.
-                        update_lecture = Lecture.objects.update(
-                            id=get_lec_record,
-                            lecturer=_lecture.lecturer,
-                            student=_lecture.student,
-                            unit_name=_lecture.unit_name,
-                            lecture_date=_lecture.lecture_date,
-                            start_time=_lecture.start_time,
-                            end_time=_lecture.end_time,
-                            recurrence_pattern=_lecture.recurrence_pattern,
-                            is_taught=True,
-                        )
 
 def user_logs(request):
     user_ip = request.META.get('REMOTE_ADDR')
