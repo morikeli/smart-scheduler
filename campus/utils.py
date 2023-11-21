@@ -1,4 +1,4 @@
-from .models import Lecture, LectureHall, Notification, RegisteredUnit
+from .models import Lecture, Notification
 from datetime import datetime as dt, timedelta, time
 from django.http import HttpResponse
 from django.db.models import Q
