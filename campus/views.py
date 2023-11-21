@@ -191,8 +191,9 @@ class FacultyDashboardView(View):
     template_name = 'dashboard/faculty/homepage.html'
 
     def get(self, request, *args, **kwargs):
+        current_date = dt.now().strftime('%Y-%m-%d')
         total_booked_units = BookedUnit.objects.filter(lecturer=request.user.faculty).count()
-        scheduled_lectures_QS = Lecture.objects.filter(lecturer=request.user.faculty).order_by('unit_name')
+        scheduled_lectures_QS = Lecture.objects.filter(lecturer=request.user.faculty, lecture_date=current_date).order_by('unit_name')
 
         context = {
             'TotalBookedUnits': total_booked_units,
