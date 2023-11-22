@@ -49,6 +49,14 @@
 										<div class="col-xl-9 col-lg-8">{{ request.user.gender|default:" -- " }}</div>
 									</div>
 									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">DoB</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.dob|default:" -- " }}</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-3 col-lg-4 label">Age</div>
+										<div class="col-xl-9 col-lg-8">{{ request.user.age|default:"0" }}</div>
+									</div>
+									<div class="row">
 										<div class="col-xl-3 col-lg-4 label">Mobile Number</div>
 										<div class="col-xl-9 col-lg-8">{{ request.user.mobile_no|default:" -- " }}</div>
 									</div>
