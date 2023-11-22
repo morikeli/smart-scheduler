@@ -21,6 +21,9 @@ class StudentHomepageView(View):
         total_units = RegisteredUnit.objects.filter(student=request.user.student).count()
         total_lectures = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
+            unit_name__students_course=request.user.student.course,
+            unit_name__year_of_study=request.user.student.year,
+            unit_name__semester=request.user.student.semester,
             lecture_date=current_date,
         ).count()
         
