@@ -16,7 +16,7 @@ class BookedUnit(models.Model):
         return self.course_name
     
     class Meta:
-        ordering = ['lecturer', 'course_name']
+        ordering = ['course_name', 'lecturer']
         verbose_name_plural = 'Booked units'
 
 class RegisteredUnit(models.Model):
@@ -29,7 +29,7 @@ class RegisteredUnit(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['student', 'unit']
+        ordering = ['unit', 'student']
         verbose_name_plural = 'Registered units'
     
     def __str__(self) -> str:
