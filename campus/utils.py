@@ -1,12 +1,9 @@
-from .models import Lecture, LectureHall, Notification, RegisteredUnit
-from datetime import datetime as dt, timedelta, time
+from .models import Lecture, Notification
+from datetime import datetime as dt, timedelta
 from django.http import HttpResponse
 from django.db.models import Q
-from time import sleep
-import schedule
 
 
-@schedule.repeat(schedule.every(1).minute.at(':15').until(time(17, 00)))
 def schedule_recurring_lectures():
     """ This is a function that automatically schedules recurring lectures, i.e daily or weekly lectures. """
 
@@ -18,19 +15,17 @@ def schedule_recurring_lectures():
         if (current_day == _lecture.lecture_date.strftime('%A %b. %d, %Y')):
             # Code to notify participants (i.e. students)
             notification = Notification.objects.get_or_create(
-                message=f'Lecture for unit "{_lecture.unit_name}" scheduled for today at {_lecture.start_time.strftime("%H:%M")}.',
+                message=f'Lecture for unit {_lecture.unit_name} scheduled for today at {_lecture.start_time.strftime("%H:%M")}.',
                 scheduled_lecture_id=_lecture.id,
             )
 
             # Code to adjust date and time for the next lectures
             if _lecture.recurrence_pattern == 'daily':
-                schedule.repeat(schedule.every().minute.at(':15').until(time(17, 00)).do(schedule_recurring_lectures))
-                # print(f'Time difference: {_lecture.start_time - timedelta(hours=3)}')
                 # in daily lectures, we have to add 1 day to the current lecture date. For example,
                 # if lecture_date is 2023-11-15 where 15 is the day, add 1 to 15 -> 15 + 1 = 16. Therefore,
                 # the next scheduled class will be on date 2023-11-16
                 # the timestamp, i.e. start_time & end_time, remains the same.
-                Lecture.objects.update_or_create(
+                new_lec = Lecture.objects.update_or_create(
                     lecturer=_lecture.lecturer,
                     student=_lecture.student,
                     unit_name=_lecture.unit_name,
@@ -45,7 +40,7 @@ def schedule_recurring_lectures():
                 # if lecture_date is 2023-11-15 where 15 is the day, add 7 to 15 -> 15 + 7 = 22. Therefore,
                 # the next scheduled class will be on date 2023-11-22
                 # the timestamp, i.e. start_time & end_time, remains the same.
-                Lecture.objects.update_or_create(
+                new_lec = Lecture.objects.update_or_create(
                     lecturer=_lecture.lecturer,
                     student=_lecture.student,
                     unit_name=_lecture.unit_name,
@@ -54,9 +49,13 @@ def schedule_recurring_lectures():
                     end_time=_lecture.end_time,
                     recurrence_pattern=_lecture.recurrence_pattern,
                 )
-            
-            
-            
-            if len(recurring_classes) != 0:
-                schedule.run_pending()
-                sleep(1)   # 
+
+def user_logs(request):
+    user_ip = request.META.get('REMOTE_ADDR')
+    visited_url = request.build_absolute_uri()
+    timestamp = dt.now().strftime("%a %d-%m-%Y %H:%M:%S")
+    log_entry = f"Visited URL: {visited_url} --> IP Address: {user_ip} - Timestamp: {timestamp}\n"
+
+    with open("log.txt", "a") as log_file:
+        log_file.write(log_entry)
+    return HttpResponse("Hello, thanks for visiting the website!")

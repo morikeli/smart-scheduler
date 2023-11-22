@@ -1,0 +1,114 @@
+    {% extends 'dashboard/students/base.html' %}{% block title %}Provide feedback{% endblock %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-sm-12">
+                    {% include 'messages.html' %}
+                </div>
+                <div class="col-sm-7 col-md-7">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Lecture hall details</h5>
+                            <img src="{{ lecture_hall_obj.image.url }}" class="img-fluid" alt="img">
+                            <hr class="mb-0">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>#</th>
+                                            <th class="text-end">Info</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-bold">
+                                                {% if 'LR' in lecture_hall_obj.hall_no %}
+                                                <b class="text-dark">Lecture room</b>
+                                                {% elif 'DR' in lecture_hall_obj.hall_no %}
+                                                <b class="text-dark">Discussion room</b>
+                                                {% else %}
+                                                <b class="text-dark">Lecture hall</b>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ lecture_hall_obj.hall_no }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Academic block</td><td class="text-end">{{ lecture_hall_obj.academic_block|default:" -- " }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Floor</td><td class="text-end">{{ lecture_hall_obj.floor|default:" -- " }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Seating capacity</td><td class="text-end">{{ lecture_hall_obj.seating_capacity|default:" -- " }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Rating</td>
+                                            <td class="text-end">
+                                                {% if lecture_hall_obj.rating == 1 %}
+                                                <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                <i class="bi-star"></i>
+                                                <i class="bi-star"></i>
+                                                <i class="bi-star"></i>
+                                                <i class="bi-star"></i>
+                                                {% elif lecture_hall_obj.rating == 2 %}
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                {% elif lecture_hall_obj.rating == 3 %}
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                {% elif lecture_hall_obj.rating == 4 %}
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star"></i>
+                                                {% elif lecture_hall_obj.rating == 5 %}
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                    <i class="bi-star-fill" style="color: #ffc107;"></i>
+                                                {% else %}
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                {% endif %}
+                                            </td>
+                                        </tr>                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 col-md-5">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Feedback form</h5>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                {{ FeedbackForm|crispy }}<hr>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-outline-secondary">Submit feedback</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+    {% endblock %}

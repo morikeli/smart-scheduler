@@ -28,28 +28,33 @@
             <ul class="d-flex align-items-center">
                 <li class="nav-item dropdown">
                     <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell-fill"></i>
-                            <span class="badge bg-danger badge-number">4</span>
+                        <i class="bi bi-bell-fill"></i>
+                        {% if TotalLecturerNotifications != 0 %}
+                        <span class="badge bg-danger badge-number">{{ TotalLecturerNotifications }}</span>
+                        {% endif %}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                            <li class="dropdown-header">
-                                You have 4 new notifications
-                                <a href=""><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning"></i>
-                                <div>
-                                    <h4>Lorem Ipsum</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>30 min. ago</p>
-                                </div>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                        <li class="dropdown-header">
+                            {% if TotalLecturerNotifications == 0 or TotalLecturerNotifications > 1 %}
+                                You have {{TotalLecturerNotifications }} new notifications.
+                            {% else %}
+                                You have {{TotalLecturerNotifications }} new notification.
+                            {% endif %}
+                            <a href=""><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% for notification in lecturer_notifications %}
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h6 class="text-muted fst-italic">Scheduled lecture</h6>
+                                <p class="fw-bold text-dark">{{ notification.message }}</p>
+                                <p>Scheduled {{ notification.date_created|timesince }} ago</p>
+                            </div>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </li>
                 <li class="nav-item dropdown pe-3">

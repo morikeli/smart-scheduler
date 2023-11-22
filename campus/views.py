@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models import Avg, Q
 from django.views import View
-from .models import BookedUnit, Lecture, LectureHall, RegisteredUnit
+from .models import BookedUnit, Feedback, Lecture, LectureHall, RegisteredUnit
 from datetime import time, datetime as dt
 
 
@@ -16,16 +17,23 @@ class StudentHomepageView(View):
     template_name = 'dashboard/students/homepage.html'
 
     def get(self, request, *args, **kwargs):
+        current_date = dt.now().strftime("%Y-%m-%d")
         total_units = RegisteredUnit.objects.filter(student=request.user.student).count()
         total_lectures = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
-            lecture_date=dt.now().strftime('%Y-%m-%d'),
+            unit_name__students_course=request.user.student.course,
+            unit_name__year_of_study=request.user.student.year,
+            unit_name__semester=request.user.student.semester,
+            lecture_date=current_date,
         ).count()
         
         scheduled_lectures_QS = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
             unit_name__students_course=request.user.student.course,
-        ).order_by('-lecture_date', '-start_time', 'unit_name')
+            unit_name__year_of_study=request.user.student.year,
+            unit_name__semester=request.user.student.semester,
+            lecture_date=current_date,
+        ).order_by('-lecture_date', 'start_time', 'unit_name')
 
         events = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
@@ -97,13 +105,15 @@ class LectureAttendanceConfirmationView(View):
     template_name = 'dashboard/students/confirm-attendance.html'
 
     def get(self, request, lecture_id, _student, *args, **kwargs):
+        current_date = dt.now().strftime('%Y-%m-%d')
         lec_obj = Lecture.objects.get(id=lecture_id)
         form = self.form_class(instance=lec_obj)
         scheduled_lectures_QS = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
             unit_name__students_course=request.user.student.course,
+            lecture_date=current_date,
             student=None,
-        ).order_by('-lecture_date', '-start_time', 'unit_name')
+        ).order_by('-lecture_date', 'start_time', 'unit_name')
 
 
         context = {
@@ -157,13 +167,13 @@ class StudentsLecturesDetailView(View):
 @method_decorator(user_passes_test(lambda user: (user.is_staff is False or user.is_superuser is False) and user.is_student is True), name='get')
 class SubmitFeedbackView(View):
     form_class = FeedbackForm
-    template_name = 'students/feedback.html'
+    template_name = 'dashboard/students/feedback.html'
 
     def get(self, request, hall_id, *args, **kwargs):
         lecture_hall = LectureHall.objects.get(id=hall_id)
         form = self.form_class()
 
-        context = {'FeedbackForm': form}
+        context = {'FeedbackForm': form, 'lecture_hall_obj': lecture_hall}
         return render(request, self.template_name, context)
     
     def post(self, request, hall_id, *args, **kwargs):
@@ -172,12 +182,17 @@ class SubmitFeedbackView(View):
 
         if form.is_valid():
             new_feedback = form.save(commit=False)
-            new_feedback.student = request.user
+            new_feedback.student = request.user.student
             new_feedback.lecture_hall = lecture_hall
             new_feedback.save()
 
+            # calculate the average rating of the lecture hall/room based on all rate scores in submitted user feedback
+            avg_rating = Feedback.objects.aggregate(avg_rating=Avg('rate_score'))['avg_rating']
+            lecture_hall.rating = avg_rating
+            lecture_hall.save()
+
             messages.info(request, 'Thank you for your feedback!')
-            return redirect('give_feedback', hall_id)
+            return redirect('student_feedback', hall_id)
 
         context = {'FeedbackForm': form}
         return render(request, self.template_name, context)
@@ -189,8 +204,9 @@ class FacultyDashboardView(View):
     template_name = 'dashboard/faculty/homepage.html'
 
     def get(self, request, *args, **kwargs):
+        current_date = dt.now().strftime('%Y-%m-%d')
         total_booked_units = BookedUnit.objects.filter(lecturer=request.user.faculty).count()
-        scheduled_lectures_QS = Lecture.objects.filter(lecturer=request.user.faculty).order_by('unit_name')
+        scheduled_lectures_QS = Lecture.objects.filter(lecturer=request.user.faculty, lecture_date=current_date).order_by('lecture_date', 'start_time')
 
         context = {
             'TotalBookedUnits': total_booked_units,
@@ -254,7 +270,19 @@ class ScheduleLectureView(View):
                 messages.error(request, 'A lecture MUST not exceed 3 hours!')
             
             else:
-                get_lecture_record = Lecture.objects.filter(lecture_date=data_lec_date, start_time__gte=data_start_time, end_time__lte=data_end_time).exists()  # check if there is a time overlap between the lectures
+                get_lecture_record = Lecture.objects.filter(
+                    Q(
+                        lecturer=request.user.faculty,
+                        lecture_date=data_lec_date,
+                        start_time__gte=data_start_time,
+                        end_time__lte=data_end_time,
+                    ) | Q(
+                        unit_name=data_unit_name,
+                        lecture_date=data_lec_date,
+                        start_time__gte=data_start_time,
+                        end_time__lte=data_end_time,
+                    )
+                ).exists()  # check if there is a time overlap between the lectures
 
                 if get_lecture_record is True:
                     messages.error(request, f'You have a scheduled lecture at this date: {data_lec_date} at {str(data_start_time).replace(":", "")}HRS - {str(data_end_time).replace(":", "")}HRS')

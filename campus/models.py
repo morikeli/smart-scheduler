@@ -73,7 +73,7 @@ class LectureHall(models.Model):
     """ This db table stores records of all available lecture halls in the entire institution. """
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     academic_block = models.CharField(max_length=20, blank=False)
-    hall_no = models.CharField(max_length=5, blank=False)
+    hall_no = models.CharField(max_length=5, unique=True, blank=False)
     seating_capacity = models.PositiveIntegerField(default=0)
     floor = models.CharField(max_length=7, blank=False)
     rating = models.PositiveIntegerField(default=0, editable=False)
@@ -93,14 +93,14 @@ class Feedback(models.Model):
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, editable=False)
     lecture_hall = models.ForeignKey(LectureHall, on_delete=models.CASCADE, editable=False)
-    complaint = models.CharField(max_length=20, blank=False)
+    complaint = models.CharField(max_length=30, blank=False)
     description = models.TextField()
     rate_score = models.PositiveIntegerField(default=0)
     date_posted = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.lecture_hall
+        return f'{self.lecture_hall}'
     
     class Meta:
         ordering = ['lecture_hall', '-date_posted']

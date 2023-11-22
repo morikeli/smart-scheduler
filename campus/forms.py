@@ -109,6 +109,7 @@ class FeedbackForm(forms.ModelForm):
         (None, '-- Select type of complaint --'),
         ('Burnt bulbs', 'Burnt bulbs/flourescent tubes'),
         ('Dirty whiteboard', 'Dirty whiteboard (Permanent marker used)'),
+        ('Dysfunctional ethernet port', 'Dysfunctional ethernet ports'),
         ('Dysfunctional sockets', 'Dysfunctional sockets'),
         ('Environmental noise', 'Environmental noise'),
         ('Naked electrical wires', 'Naked electrical wires'),
@@ -124,11 +125,11 @@ class FeedbackForm(forms.ModelForm):
         label='Complaints', 
     )
     description = forms.CharField(widget=forms.Textarea(attrs={
-            'type': 'text', 'class': 'mb-0', 'placeholder': 'Provide more details about your complaints/approvals ...',
+            'type': 'text', 'class': 'mb-0', 'placeholder': 'Provide more details about your complaints/approvals about this room/hall ...',
         }),
         help_text='What are your complaints or what you love about this lecture hall/room.',   
     )
-    rate = forms.CharField(widget=forms.NumberInput(attrs={
+    rate_score = forms.CharField(widget=forms.NumberInput(attrs={
             'type': 'number', 'class': 'mb-0', 'min': 0, 'max': 5,
         }),
         help_text='How do you rate this hall?',
@@ -137,7 +138,7 @@ class FeedbackForm(forms.ModelForm):
 
     class Meta:
         model = Feedback
-        fields = ['complaint', 'description', 'rate']
+        fields = ['complaint', 'description', 'rate_score']
 
 
 # Edit forms
