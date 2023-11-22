@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from django.views import View
 from .models import BookedUnit, Feedback, Lecture, LectureHall, RegisteredUnit
 from datetime import time, datetime as dt
@@ -265,7 +265,19 @@ class ScheduleLectureView(View):
                 messages.error(request, 'A lecture MUST not exceed 3 hours!')
             
             else:
-                get_lecture_record = Lecture.objects.filter(lecture_date=data_lec_date, start_time__gte=data_start_time, end_time__lte=data_end_time).exists()  # check if there is a time overlap between the lectures
+                get_lecture_record = Lecture.objects.filter(
+                    Q(
+                        lecturer=request.user.faculty,
+                        lecture_date=data_lec_date,
+                        start_time__gte=data_start_time,
+                        end_time__lte=data_end_time,
+                    ) | Q(
+                        unit_name=data_unit_name,
+                        lecture_date=data_lec_date,
+                        start_time__gte=data_start_time,
+                        end_time__lte=data_end_time,
+                    )
+                ).exists()  # check if there is a time overlap between the lectures
 
                 if get_lecture_record is True:
                     messages.error(request, f'You have a scheduled lecture at this date: {data_lec_date} at {str(data_start_time).replace(":", "")}HRS - {str(data_end_time).replace(":", "")}HRS')
