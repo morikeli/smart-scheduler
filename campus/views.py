@@ -27,6 +27,8 @@ class StudentHomepageView(View):
         scheduled_lectures_QS = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
             unit_name__students_course=request.user.student.course,
+            unit_name__year_of_study=request.user.student.year,
+            unit_name__semester=request.user.student.semester,
             lecture_date=current_date,
         ).order_by('-lecture_date', 'start_time', 'unit_name')
 
