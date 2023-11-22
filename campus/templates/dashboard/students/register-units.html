@@ -23,7 +23,7 @@
                                             <td>{{ forloop.counter }}</td>
                                             <td>{{ units.unit }}</td>
                                             <td>{{ units.unit.lecturer.staff.first_name|title }} {{ units.unit.lecturer.staff.last_name|title }}</td>
-                                            <td class="text-center"><img src="{{ units.unit.lecturer.staff.profile_pic.url }}" height="30px" width="30px" alt="dp"></td>
+                                            <td class="text-center"><img class="rounded-circle" src="{{ units.unit.lecturer.staff.profile_pic.url }}" height="45px" width="45px" alt="lec-dp"></td>
                                             <td class="text-center">
                                                 {% if units.is_registered is True %}
                                                 <span><i class="bi-check-circle-fill" style="color: #0e9437;"></i></span>
