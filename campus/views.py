@@ -230,7 +230,7 @@ class FacultyDashboardView(View):
         scheduled_lectures_QS = Lecture.objects.filter(lecturer=request.user.faculty, lecture_date=current_date).order_by('lecture_date', 'start_time')
 
         # check for lectures before current date
-        past_lectures_qs = Lecture.objects.filter(is_taught=False, lecture_date__lte=self.current_date)
+        past_lectures_qs = Lecture.objects.filter(is_taught=False, lecture_date__lte=current_date)
         for _lecture in past_lectures_qs:   # iterate through all lectures in the queryset
             get_lecture = Lecture.objects.get(id=_lecture.id)   # get each lecture in the qs using their id
             if get_lecture.is_taught is False:
