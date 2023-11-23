@@ -260,8 +260,8 @@ class ScheduleLectureView(View):
         if (lecture_scheduled_date.strftime('%Y-%m-%d') < dt.now().strftime("%Y-%m-%d")) or (elapsed_days:=(lecture_scheduled_date.day - dt.now().day)) > 14:
             messages.error(request, 'Invalid date input! Date should range from current date to 14 days after current date.')
         
-        elif (str(lecture_start_time) < dt.now().strftime("%H:%M")) and (lecture_scheduled_date.strftime('%Y-%m-%d') < dt.now().strftime("%Y-%m-%d")):
-            messages.error(request, 'Invalid time input! Enter time past current date and time.')
+        elif (lecture_start_time.strftime('%H:%M') < dt.now().strftime("%H:%M")) and (lecture_scheduled_date.strftime('%Y-%m-%d') <= dt.now().strftime("%Y-%m-%d")):
+            messages.error(request, "Invalid time input! Can't schedule a lecture for a past time or date.")
         
         elif (lecture_scheduled_date.weekday() == 5) or (lecture_scheduled_date.weekday() == 6):
             messages.error(request, 'Cannot schedule a lecture on a weekend!')
