@@ -32,8 +32,16 @@ class StudentHomepageView(View):
             unit_name__students_course=request.user.student.course,
             unit_name__year_of_study=request.user.student.year,
             unit_name__semester=request.user.student.semester,
-            lecture_date=current_date,
+            lecture_date__lte=current_date,
         ).order_by('-lecture_date', 'start_time', 'unit_name')
+
+        # check for lectures before current date
+        past_lectures_qs = Lecture.objects.filter(is_taught=False, lecture_date__lte=current_date)
+        for _lecture in past_lectures_qs:   # iterate through all lectures in the queryset
+            get_lecture = Lecture.objects.get(id=_lecture.id)   # get each lecture in the qs using their id
+            if get_lecture.is_taught is False:
+                get_lecture.is_taught = True    # if the lecture's "is_taught" is False change it to True.
+                get_lecture.save()
 
         events = Lecture.objects.filter(
             lecturer__department=request.user.student.department,
