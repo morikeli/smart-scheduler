@@ -103,6 +103,7 @@ class StudentsUnitsRegistrationView(View):
 class LectureAttendanceConfirmationView(View):
     form_class = StudentsAttendanceConfirmationForm
     template_name = 'dashboard/students/confirm-attendance.html'
+    current_date = dt.now().strftime('%Y-%m-%d')
 
     def get(self, request, lecture_id, _student, *args, **kwargs):
         current_date = dt.now().strftime('%Y-%m-%d')
@@ -141,6 +142,16 @@ class LectureAttendanceConfirmationView(View):
             confirmation.student = request.user.student
             confirmation.total_students += 1
             confirmation.save()
+
+            # check for lectures before current date
+            past_lectures_qs = Lecture.objects.filter(is_taught=False, lecture_date__lte=self.current_date)
+
+            for _lecture in past_lectures_qs:   # iterate through all lectures in the queryset
+                get_lecture = Lecture.objects.get(id=_lecture.id)   # get each lecture in the qs using their id
+
+                if get_lecture.is_taught is False:
+                    get_lecture.is_taught = True    # if the lecture's "is_taught" is False change it to True.
+                    get_lecture.save()
 
             messages.success(request, 'Confirmation submitted succesfully!')
             return redirect('confirm_attendance', lecture_id, _student)
