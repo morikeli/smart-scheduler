@@ -4,7 +4,7 @@
 
 
 ### Overview
-  This is a web app that is meant to serve our local learning institution - the website serves students and the administration. The website enables lecturers to schedule lectures while students receive updates and notification about the scheduled lectures. To avoid time wastage and disruption when looking for an appropriate venue, the web app automatically allocates venues to each lecture scheduled for the current date.
+This web application is designed to support our local educational institution by serving both students and administrators. It allows lecturers to schedule lectures, while students receive updates and notifications about these schedules. To minimize time loss and disruptions when searching for suitable venues, the app automatically assigns available venues to lectures scheduled for the current day.
 
 ### Technologies used
   - HTML
@@ -14,16 +14,18 @@
   - Django (backend)
 
 ### User instructions
-  The website is live, i.e. its already deployed on Render [visit website](https://smart-schedule.onrender.com/auth/login). To use the website you must create an account either as a student, Head of Department (HOD) or a lecturer.
-#### Students 
+  Click this [link](https://smart-schedule.onrender.com/auth/login) to use and view the website. To use the website you must create an account either as a student, Head of Department (HOD) or a lecturer.
+
+#### Responsibility of a student
   - register units they will be studying in the current semester
   - update their students info, e.g. year of study, semester
   - confirm they will be attending a scheduled lecture
   - provide feedback about the venue of the latest lecture
-#### Lecturers 
+
+#### Responsibility of a lecturer
   - schedule lectures they will be teaching on a given date and time
 
-#### The Head of department (HOD)
+#### Responsibility of the Head of department (HOD)
   - appoints/assigns units a lecturer will be teaching in the current semester
   - schedules a lecture he/she will be teaching in the current semester
 
@@ -43,7 +45,7 @@
  Feel free to report any issues encountered (create an issue using the `Issues` tab or provide your feedback through the `Discussions` tab. Your feedback is highly appreciated.
 
 ### Buy me coffee
-##### Fun fact!
+**Fun fact!**
   I need coffee to survive. It's like my liquid superhero serum. Be a hero today!
   Appreciate the effort put in developing the project by [buying me coffee today!](https://www.buymeacoffee.com/keli.io) 😁
 
