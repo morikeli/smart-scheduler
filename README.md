@@ -43,9 +43,3 @@ This web application is designed to support our local educational institution by
 
 ### Issues
  Feel free to report any issues encountered (create an issue using the `Issues` tab or provide your feedback through the `Discussions` tab. Your feedback is highly appreciated.
-
-### Buy me coffee
-**Fun fact!**
-  I need coffee to survive. It's like my liquid superhero serum. Be a hero today!
-  Appreciate the effort put in developing the project by [buying me coffee today!](https://www.buymeacoffee.com/keli.io) 😁
-
